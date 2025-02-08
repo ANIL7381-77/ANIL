@@ -1,0 +1,154 @@
+𝗠 𝗢 𝗡 𝗔 𝗥 𝗖 𝗛:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glow Effect and Timer Example</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.postimg.cc/yNf4JnR3/res-drawable-xhdpi-v4-tumharimakabhosdabc-2.png');
+            background-color: #000000;
+            color: #FFFFFF;
+            text-align: center;0
+        }
+
+        /* Glowing effect for text */
+        .glowing-text {
+            color: #00E676;
+            text-shadow: 0 0 5px #00E676, 0 0 10px #00E676, 0 0 20px #00E676, 0 0 40px #00E676;
+        }
+
+        /* Glowing effect for button */
+        .glowing-button {
+            background-color: #18FFFF;
+            color: white;
+            font-size: 20px;
+            padding: 15px 30px;
+            border-radius: 40px;
+            border: none;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .glowing-button:hover {
+            box-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF, 0 0 30px #00FFFF;
+        }
+
+        /* Timer text styles */
+        .timer-text {
+            font-size: 18px;
+            color: #F50057;
+        }
+
+        /* Section container styles */
+        .section-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #18FFFF;
+            border-radius: 10px;
+        }
+
+        /* Background gradient effect for sections */
+        .gradient-bg {
+            background: linear-gradient(to bottom, #000000, #333333);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Image in Linear1 */
+        #linear1 {
+            background-image: url('https://images.app.goo.gl/GV4o99GnjydABqxE8');
+            background-size: cover;
+            height: 200px;
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="linear1"></div>
+
+    <div class="section-container">
+        <div class="gradient-bg">
+            <h1 class="glowing-text">𝐖𝐈𝐍𝐆𝐎 𝟑𝟎 𝐒𝐄𝐂𝐎𝐍𝐃</h1>
+        </div>
+
+        <div class="gradient-bg">
+            <p class="timer-text" id="textview2">𝐏𝐄𝐑𝐈𝐎𝐃 ➪</p>
+            <p class="glowing-text" id="textview5">TextView</p>
+        </div>
+
+        <div class="gradient-bg">
+            <p class="timer-text" id="textview3">𝐓𝐈𝐌𝐄𝐑 ➪</p>
+            <p class="glowing-text" id="textview6">TextView</p>
+        </div>
+
+        <div class="gradient-bg">
+            <p class="glowing-text" id="textview4">TextView</p>
+        </div>
+
+        <button class="glowing-button" id="button1">Button</button>
+    </div>
+
+    <script>
+        // Timer and button logic
+        let button1 = document.getElementById('button1');
+        let textview4 = document.getElementById('textview4');
+        let textview5 = document.getElementById('textview5');
+        let textview6 = document.getElementById('textview6');
+        let timer;
+
+        button1.onclick = function() {
+            let n = Math.floor(Math.random() * 6) + 1;
+            textview4.textContent = "𝗖𝗛𝗘𝗞𝗜𝗡𝗚 𝗦𝗢𝗥𝗩𝗘𝗥..";
+            
+            setTimeout(function() {
+                if (n === 1) textview4.textContent = "𝟲,𝟴,𝟯";
+                if (n === 2) textview4.textContent = "𝟮,𝟰,𝟵";
+                if (n === 3) textview4.textContent = "𝟱,𝟳,𝟬";
+                if (n === 4) textview4.textContent = "𝟭,𝟯,𝟳";
+                if (n === 5) textview4.textContent = "𝟲,𝟵,𝟮";
+                if (n === 6) textview4.textContent = "𝟬,𝟰,𝟲";
+            }, 1500);
+        };
+
+        // Timer that updates every second
+        function updateTimer() {
+            let date = new Date();
+            let currentHour = date.getHours();
+            let currentMinute = date.getMinutes();
+            let seconds = date.getSeconds();
+
+            let startHour = 5;
+            let startMinute = 30;
+
+let elapsedSeconds = (currentHour * 3600 + currentMinute * 60 + seconds) - (startHour * 3600 + startMinute * 60);
+
+if (elapsedSeconds < 0) {
+                elapsedSeconds = 0;
+            }
+
+            let totalPeriods = Math.floor(elapsedSeconds / 30);
+            let upcomingPeriod = totalPeriods + 1;
+
+            let formattedDate = date.toISOString().split('T')[0].replace(/-/g, '');
+            let periodNumber = "100005" + String(upcomingPeriod).padStart(4, '0');
+
+            textview5.textContent = formattedDate + periodNumber;
+
+            let remainingSeconds = 30 - (seconds % 30);
+            textview6.textContent = String(remainingSeconds).padStart(2, '0') + "s";
+        }
+
+        setInterval(updateTimer, 1000); // Update timer every second
+    </script>
+
+</body>
+</html>
