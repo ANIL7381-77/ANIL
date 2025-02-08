@@ -3,288 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANIL MINES BOT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <title>UI Layout</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://i.pinimg.com/736x/c8/3e/30/c83e302cff342ece660ed696cdabdeba.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        .linear2 {
+            display: flex;
+            padding: 8px;
+            justify-content: center;
+        }
+        .linear3 {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            background-color: #000;
+            flex-grow: 1;
+            padding: 8px;
         }
-
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-            color: #00ff00;
-            font-size: 24px;
-        }
-
-        #game-board {
-            display: grid;
-            grid-template-columns: repeat(5, 50px);
-            grid-gap: 10px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .cell {
-            width: 50px;
-            height: 50px;
-            background-color: #333;
-            border-radius: 5px;
+        .linear4 {
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            width: 300px;
+            border-radius: 6px;
+            border: 2px solid #D50000;
+            background: rgba(0, 0, 0, 0.75);
+            box-shadow: 0px 0px 15px rgba(213, 0, 0, 0.8);
+        }
+        .linear5 {
+            display: flex;
+            width: 250px;
+            height: 250px;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            padding: 8px;
+            border-radius: 6px;
+            border: 5px solid #D50000;
+            background: transparent;
+            box-shadow: 0px 0px 20px rgba(213, 0, 0, 0.8);
         }
-
-        .safe {
-            background-color: #00ff00 !important;
-            color: black;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #00ff00;
-            color: #000;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        #result {
+            font-size: 30px;
+            color: #D6001E;
             font-weight: bold;
-            position: relative;
-            z-index: 1;
+            text-shadow: 0px 0px 10px rgba(214, 0, 30, 0.8);
         }
-
-        button:hover {
-            background-color: #00cc00;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        #timer {
-            margin-top: 20px;
-            font-size: 24px;
-            color: #00ff00;
-            display: none;
-        }
-
-        /* Popup Styles */
-        #key-dialog {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(50, 50, 50, 0.9);
-            padding: 20px; /* Adjusted padding */
-            border-radius: 10px;
-            z-index: 2;
-            display: none;
-            color: #00ff00;
-            text-align: center;
-            width: 250px; /* Adjusted width */
-            height: 150px; /* Adjusted height */
-        }
-
-        #key-input {
-            width: 100px;
-            font-size: 18px;
-            padding: 5px;
+        #textview1 {
             margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #D50000;
+            text-shadow: 0px 0px 8px rgba(213, 0, 0, 0.8);
         }
-
-        #submit-key {
-            margin-top: 10px;
+        #button1 {
+            padding: 8px 15px;
+            background: linear-gradient(45deg, #D6001E, #ff4d4d);
+            color: white;
+            font-size: 12px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 0px 15px rgba(214, 0, 30, 0.8);
         }
-
-        #key-dialog h2 {
-            font-size: 18px; /* Smaller font size for the header */
+        #button1:active {
+            opacity: 0.6;
+        }
+        #button1:focus {
+            box-shadow: 0px 0px 25px rgba(214, 0, 30, 1);
         }
     </style>
 </head>
 <body>
-
-    <div id="particles-js"></div>
-
-    <h1>ASHURA MINES BOT</h1>
-    
-    <!-- Key Entry Dialog -->
-    <div id="key-dialog">
-        <h2>Enter 6-Digit Key</h2>
-        <input type="text" id="key-input" maxlength="6" />
-        <button id="submit-key">Submit</button>
-        <div id="key-error" style="color: red; display: none;">Invalid key! Try again.</div>
+    <div class="container">
+        <div class="linear2"></div>
+        <div class="linear3">
+            <div class="linear4">
+                <div class="linear5">
+                    <span id="result">𝐆𝐄𝐓 𝐒𝐇𝐎𝐓𝐄</span>
+                </div>
+                <div id="textview1">TextView</div>
+                <button id="button1">𝐀𝐓𝐓𝐀𝐂𝐊</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Mines Board -->
-    <div id="game-board" style="display: none;"></div>
-
-    <!-- Button to predict safe mines -->
-    <button id="predict-btn" style="display: none;">Show Safe Mines</button>
-    <div id="timer"></div>
-
-    <!-- Include particles.js -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Initialize particles.js for the game screen
-        particlesJS("particles-js", {
-            particles: {
-                number: {
-                    value: 100,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: "#FFFF00"
-                },
-                shape: {
-                    type: "circle",
-                    stroke: {
-                        width: 0,
-                        color: "#000000"
-                    }
-                },
-                opacity: {
-                    value: 0.5,
-                    random: false,
-                },
-                size: {
-                    value: 5,
-                    random: true,
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#FFFF00",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 6,
-                    direction: "none",
-                    random: false,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: "repulse"
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "push"
-                    },
-                    resize: true
-                }
-            },
-            retina_detect: true
-        });
-
-        const boardSize = 5; // 5x5 board
-        const totalCells = boardSize * boardSize;
-
-        // Create the game board grid
-        const gameBoard = document.getElementById("game-board");
-        for (let i = 0; i < totalCells; i++) {
-            const cell = document.createElement("div");
-            cell.classList.add("cell");
-            gameBoard.appendChild(cell);
+        // Live clock for textview1
+        function updateClock() {
+            let now = new Date();
+            let formattedTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+            document.getElementById('textview1').innerText = formattedTime;
         }
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call to set the clock
 
-        // Function to get exactly three safe mines prediction
-        function getSafeMines() {
-            const safeMines = [];
-            const numSafeMines = 3; // Fixed to show only 3 safe mines
+        // Handle button click event
+        document.getElementById('button1').addEventListener('click', function() {
+            let button = this;
+            let result = document.getElementById('result');
 
-            while (safeMines.length < numSafeMines) {
-                const randomIndex = Math.floor(Math.random() * totalCells);
-                if (!safeMines.includes(randomIndex)) {
-                    safeMines.push(randomIndex);
-                }
+            // Simulate vibration effect (optional, works only on mobile devices)
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
             }
 
-            return safeMines;
-        }
+            // Hide button for 35 seconds
+            button.style.display = 'none';
+            setTimeout(() => {
+                button.style.display = 'block';
+            }, 35000);
 
-        // Key validation
-        document.getElementById("submit-key").addEventListener("click", function() {
-            const keyInput = document.getElementById("key-input").value;
-            const validKey = "anilbhoi"; // Changed to the new valid key
+            // Change result text to "ATTACKING..."
+            result.innerText = "𝐀𝐓𝐓𝐀𝐂𝐊𝐈𝐍𝐆....";
 
-            if (keyInput === validKey) {
-                document.getElementById("key-dialog").style.display = "none";
-                gameBoard.style.display = "grid"; // Show game board
-                document.getElementById("predict-btn").style.display = "inline-block"; // Show button
-            } else {
-                document.getElementById("key-error").style.display = "block"; // Show error message
-            }
+            // After 3.5 seconds, predict "SMALL" or "BIG"
+            setTimeout(() => {
+                let randomNum = Math.floor(Math.random() * 10);
+                let trend = randomNum < 5 ? "𝚂𝙼𝙰𝙻𝙻" : "𝙱𝙸𝙶";
+                result.innerText = trend;
+                console.log("Predicted trend:", trend);
+            }, 3500);
         });
-
-        // Show safe mines when button is clicked
-        document.getElementById("predict-btn").addEventListener("click", function() {
-            this.disabled = true;
-
-            const cells = document.querySelectorAll(".cell");
-            const safeMines = getSafeMines();
-
-            cells.forEach(cell => cell.classList.remove("safe"));
-            safeMines.forEach(index => {
-                cells[index].classList.add("safe");
-            });
-
-            startCooldown(10); // 10 seconds cooldown
-        });
-
-        function startCooldown(duration) {
-            const timerDisplay = document.getElementById("timer");
-            timerDisplay.style.display = "block";
-            timerDisplay.textContent = `Cooldown: ${duration} seconds`;
-
-            let remainingTime = duration;
-
-            const countdown = setInterval(() => {
-                remainingTime--;
-                timerDisplay.textContent = `Cooldown: ${remainingTime} seconds`;
-
-                if (remainingTime <= 0) {
-                    clearInterval(countdown);
-                    timerDisplay.style.display = "none";
-                    document.getElementById("predict-btn").disabled = false;
-                }
-            }, 1000);
-        }
-
-        // Show the key dialog on page load
-        window.onload = function() {
-            document.getElementById("key-dialog").style.display = "block";
-        };
     </script>
 </body>
 </html>
