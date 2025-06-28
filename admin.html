@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Manager Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-light: #d1fae5;
+            --primary-dark: #059669;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --radius: 6px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-alt);
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0.75rem;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 0.875rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+
+        .header-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            color: var(--text-light);
+            font-size: 0.75rem;
+        }
+
+        .header-time {
+            text-align: right;
+            color: var(--text-light);
+            font-size: 0.6875rem;
+            line-height: 1.3;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 0.75rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .stat:hover {
+            transform: translateY(-1px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.375rem;
+        }
+
+        .stat-title {
+            color: var(--text-light);
+            font-size: 0.6875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .stat-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--primary-light);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            font-size: 0.625rem;
+        }
+
+        .stat-value {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .stat-label {
+            font-size: 0.625rem;
+            color: var(--text-light);
+            margin-top: 0.125rem;
+        }
+
+        /* Layout */
+        .main {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 1rem;
+        }
+
+        /* Card */
+        .card {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 0.875rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            height: fit-content;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.875rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+        .card-header h2 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-light);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            font-size: 0.75rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            transition: border-color 0.2s;
+            background: var(--bg);
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-light);
+        }
+
+        /* Button */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 0.75rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-alt);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.6875rem;
+        }
+
+        /* Table */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg);
+            font-size: 0.75rem;
+        }
+
+        .table th {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .table td {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table tbody tr:hover {
+            background: var(--bg-alt);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status */
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.125rem 0.375rem;
+            border-radius: 12px;
+            font-size: 0.6875rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .status-expired {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            max-width: 400px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 0.875rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-alt);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 0.875rem;
+        }
+
+        .modal-footer {
+            padding: 0.75rem 0.875rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            top: 0.75rem;
+            right: 0.75rem;
+            z-index: 1100;
+        }
+
+        .toast {
+            background: var(--bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            padding: 0.75rem;
+            margin-bottom: 0.375rem;
+            min-width: 250px;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-success {
+            border-left: 3px solid var(--primary);
+        }
+
+        .toast-error {
+            border-left: 3px solid #ef4444;
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .toast-success .toast-icon {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .toast-error .toast-icon {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-bottom: 0.125rem;
+        }
+
+        .toast-message {
+            font-size: 0.6875rem;
+            color: var(--text-light);
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--border);
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.375rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+
+            .header {
+                padding: 0.625rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .header-title {
+                font-size: 1rem;
+            }
+
+            .header-subtitle {
+                font-size: 0.6875rem;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+
+            .main {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .card {
+                padding: 0.75rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.375rem;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 0.125rem;
+            }
+
+            .modal {
+                width: 95%;
+                margin: 0.5rem;
+            }
+
+            .modal-header,
+            .modal-body,
+            .modal-footer {
+                padding: 0.75rem;
+            }
+
+            .toast {
+                min-width: 200px;
+                font-size: 0.6875rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .header-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 0.75rem;
+            }
+
+            .stat {
+                padding: 0.625rem;
+            }
+
+            .stat-value {
+                font-size: 1.25rem;
+            }
+
+            .table {
+                font-size: 0.6875rem;
+            }
+
+            .btn {
+                font-size: 0.6875rem;
+                padding: 0.375rem 0.625rem;
+            }
+
+            .btn-sm {
+                padding: 0.25rem 0.375rem;
+                font-size: 0.625rem;
+            }
+        }
+
+        /* Utility */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .font-bold { font-weight: 600; }
+        .text-sm { font-size: 0.75rem; }
+        .text-xs { font-size: 0.6875rem; }
+        .mb-0 { margin-bottom: 0; }
+        .w-full { width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="header-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">Key Manager Pro</h1>
+                        <p class="header-subtitle">License Management System</p>
+                    </div>
+                </div>
+                <div class="header-time">
+                    <div><i class="fas fa-calendar"></i> <span id="currentDate"></span></div>
+                    <div><i class="fas fa-clock"></i> <span id="currentTime"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-header">
+                    <span class="stat-title">Total</span>
+                    <div class="stat-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="totalKeys">0</div>
+                <div class="stat-label">All keys</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-header">
+                    <span class="stat-title">Active</span>
+                    <div class="stat-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="activeKeys">0</div>
+                <div class="stat-label">Valid keys</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-header">
+                    <span class="stat-title">Devices</span>
+                    <div class="stat-icon">
+                        <i class="fas fa-mobile"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="totalDevices">0</div>
+                <div class="stat-label">Connected</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-header">
+                    <span class="stat-title">Expired</span>
+                    <div class="stat-icon">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="expiredKeys">0</div>
+                <div class="stat-label">Need attention</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Create Form -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <h2>Create Key</h2>
+                </div>
+
+                <form id="keyForm">
+                    <div class="form-group">
+                        <label class="form-label">Key Name</label>
+                        <input type="text" id="keyInput" class="form-input" placeholder="Enter key name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Validity</label>
+                        <select id="validitySelect" class="form-select" required>
+                            <option value="">Select period</option>
+                            <option value="1">1 Day</option>
+                            <option value="3">3 Days</option>
+                            <option value="7">1 Week</option>
+                            <option value="15">15 Days</option>
+                            <option value="30">1 Month</option>
+                            <option value="90">3 Months</option>
+                            <option value="365">1 Year</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Max Devices</label>
+                        <input type="number" id="deviceLimit" class="form-input" placeholder="1-10" min="1" max="10" required>
+                         </div>
+
+                    <button type="submit" class="btn btn-primary w-full">
+                        <i class="fas fa-plus"></i>
+                        Create Key
+                    </button>
+                </form>
+            </div>
+
+            <!-- Keys Table -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <h2>License Keys</h2>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="table" id="keyTable">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Expires</th>
+                                <th>Max</th>
+                                <th>Used</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="loading">
+                                    <div class="spinner"></div>
+                                    Loading...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-trash" style="color: #ef4444;"></i>
+                    Delete Key
+                </div>
+                <button class="modal-close" onclick="closeModal('deleteModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Delete key <strong id="deleteKeyName"></strong>?</p>
+                <p class="text-xs" style="color: var(--text-light); margin-top: 0.375rem;">
+                    This action cannot be undone.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i>
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-edit" style="color: var(--primary);"></i>
+                    Edit Key
+                </div>
+                <button class="modal-close" onclick="closeModal('editModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Key Name</label>
+                    <input type="text" id="editKeyName" class="form-input" readonly style="background: var(--bg-alt);">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Max Devices</label>
+                    <input type="number" id="editDeviceLimit" class="form-input" min="1" max="10" required>
+                </div>
+                <p class="text-xs" style="color: var(--text-light);">
+                    Current: <span id="currentDeviceLimit"></span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
+                <button class="btn btn-primary" id="confirmEditBtn">
+                    <i class="fas fa-save"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="toast-container" id="toastContainer"></div>
+
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyArh15cvNsIu0rrRFgCBHVxiRLm50OihSA",
+            authDomain: "dark-ad97e.firebaseapp.com",
+            databaseURL: "https://dark-ad97e-default-rtdb.firebaseio.com",
+            projectId: "dark-ad97e",
+            storageBucket: "dark-ad97e.appspot.com",
+            messagingSenderId: "298766849765",
+            appId: "1:298766849765:android:1ce573c8dc76f8af33e60c"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let allKeys = {};
+        let currentEditKey = null;
+        let currentDeleteKey = null;
+
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            loadKeys();
+            
+            document.getElementById('keyForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                createKey();
+            });
+
+            document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+            document.getElementById('confirmEditBtn').addEventListener('click', confirmEdit);
+
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) {
+                        closeModal(overlay.id);
+                    }
+                });
+            });
+        });
+
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            });
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', {
+                hour12: true,
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            const icon = type === 'success' ? 'check' : 'times';
+            
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas fa-${icon}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => container.removeChild(toast), 300);
+            }, 3000);
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function createKey() {
+            const key = document.getElementById('keyInput').value.trim();
+            const days = parseInt(document.getElementById('validitySelect').value);
+            const maxDevices = parseInt(document.getElementById('deviceLimit').value);
+
+            if (!key) {
+                showToast('error', 'Error', 'Enter key name');
+                return;
+            }
+            if (!days) {
+                showToast('error', 'Error', 'Select validity period');
+                return;
+            }
+            if (!maxDevices || maxDevices < 1 || maxDevices > 10) {
+                showToast('error', 'Error', 'Invalid device limit');
+                return;
+            }
+
+            if (allKeys[key]) {
+                showToast('error', 'Error', 'Key already exists');
+                return;
+            }
+
+            const now = Date.now();
+            const expiresAt = now + days * 86400000;
+
+            db.ref('users/' + key).set({
+                createdAt: now,
+                expiresAt: expiresAt,
+                deviceLimit: maxDevices,
+                devices: {}
+            }).then(() => {
+                showToast('success', 'Success', 'Key created');
+                document.getElementById('keyForm').reset();
+                loadKeys();
+            }).catch((error) => {
+                showToast('error', 'Error', 'Failed to create key');
+            });
+        }
+
+        function loadKeys() {
+            db.ref('users').once('value').then(snapshot => {
+                allKeys = snapshot.val() || {};
+                updateTable();
+                updateStats();
+            }).catch((error) => {
+                showToast('error', 'Error', 'Failed to load keys');
+            });
+        }
+
+        function updateStats() {
+            const now = Date.now();
+            let total = 0, active = 0, expired = 0, devices = 0;
+
+            Object.keys(allKeys).forEach(key => {
+                const data = allKeys[key];
+                total++;
+                
+                if (data.expiresAt > now) {
+                    active++;
+                } else {
+                    expired++;
+                }
+                
+                devices += Object.keys(data.devices || {}).length;
+            });
+
+            document.getElementById('totalKeys').textContent = total;
+            document.getElementById('activeKeys').textContent = active;
+            document.getElementById('expiredKeys').textContent = expired;
+            document.getElementById('totalDevices').textContent = devices;
+        }
+
+        function updateTable() {
+            const tbody = document.querySelector('#keyTable tbody');
+            tbody.innerHTML = '';
+
+            if (Object.keys(allKeys).length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center" style="padding: 1.5rem; color: var(--text-light);">
+                            <i class="fas fa-inbox" style="font-size: 1.25rem; display: block; margin-bottom: 0.375rem;"></i>
+                            No keys found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            Object.keys(allKeys).forEach(key => {
+                const data = allKeys[key];
+                const now = Date.now();
+                const isExpired = data.expiresAt <= now;
+                const connected = Object.keys(data.devices || {}).length;
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div class="font-bold">${key}</div>
+                        <div class="text-xs" style="color: var(--text-light);">
+                            ${new Date(data.createdAt).toLocaleDateString()}
+                        </div>
+                    </td>
+                    <td>
+                        <div>${new Date(data.expiresAt).toLocaleDateString()}</div>
+                        <div class="text-xs" style="color: var(--text-light);">
+                            ${new Date(data.expiresAt).toLocaleTimeString()}
+                        </div>
+                    </td>
+                    <td class="font-bold">${data.deviceLimit || 1}</td>
+                    <td class="font-bold" style="color: ${connected > 0 ? 'var(--primary)' : 'var(--text-light)'};">
+                        ${connected}
+                    </td>
+                    <td>
+                        <span class="status ${isExpired ? 'status-expired' : 'status-active'}">
+                            <i class="fas fa-${isExpired ? 'times' : 'check'}"></i>
+                            ${isExpired ? 'Expired' : 'Active'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-secondary btn-sm" onclick="editKey('${key}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteKey('${key}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteKey(key) {
+            currentDeleteKey = key;
+            document.getElementById('deleteKeyName').textContent = key;
+            showModal('deleteModal');
+        }
+
+        function confirmDelete() {
+            if (!currentDeleteKey) return;
+            
+            db.ref('users/' + currentDeleteKey).remove().then(() => {
+                showToast('success', 'Deleted', 'Key removed');
+                closeModal('deleteModal');
+                currentDeleteKey = null;
+                loadKeys();
+            }).catch(() => {
+                showToast('error', 'Error', 'Delete failed');
+            });
+        }
+
+        function editKey(key) {
+            currentEditKey = key;
+            const data = allKeys[key];
+            
+            document.getElementById('editKeyName').value = key;
+            document.getElementById('editDeviceLimit').value = data.deviceLimit || 1;
+            document.getElementById('currentDeviceLimit').textContent = data.deviceLimit || 1;
+            
+            showModal('editModal');
+        }
+
+        function confirmEdit() {
+            if (!currentEditKey) return;
+            
+            const newLimit = parseInt(document.getElementById('editDeviceLimit').value);
+            
+            if (isNaN(newLimit) || newLimit < 1 || newLimit > 10) {
+                showToast('error', 'Error', 'Invalid device limit');
+                return;
+            }
+            
+            db.ref('users/' + currentEditKey + '/deviceLimit').set(newLimit).then(() => {
+                showToast('success', 'Updated', 'Device limit changed');
+                closeModal('editModal');
+                currentEditKey = null;
+                loadKeys();
+            }).catch(() => {
+                showToast('error', 'Error', 'Update failed');
+            });
+        }
+
+        
+        setInterval(loadKeys, 30000);
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
