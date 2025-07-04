@@ -1,150 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UI Layout</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-image: url('https://i.pinimg.com/736x/c8/3e/30/c83e302cff342ece660ed696cdabdeba.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-        }
-        .linear2 {
-            display: flex;
-            padding: 8px;
-            justify-content: center;
-        }
-        .linear3 {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-            padding: 8px;
-        }
-        .linear4 {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px;
-            width: 300px;
-            border-radius: 6px;
-            border: 2px solid #D50000;
-            background: rgba(0, 0, 0, 0.75);
-            box-shadow: 0px 0px 15px rgba(213, 0, 0, 0.8);
-        }
-        .linear5 {
-            display: flex;
-            width: 250px;
-            height: 250px;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            border-radius: 6px;
-            border: 5px solid #D50000;
-            background: transparent;
-            box-shadow: 0px 0px 20px rgba(213, 0, 0, 0.8);
-        }
-        #result {
-            font-size: 30px;
-            color: #D6001E;
-            font-weight: bold;
-            text-shadow: 0px 0px 10px rgba(214, 0, 30, 0.8);
-        }
-        #textview1 {
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #D50000;
-            text-shadow: 0px 0px 8px rgba(213, 0, 0, 0.8);
-        }
-        #button1 {
-            padding: 8px 15px;
-            background: linear-gradient(45deg, #D6001E, #ff4d4d);
-            color: white;
-            font-size: 12px;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            transition: opacity 0.3s, box-shadow 0.3s;
-            box-shadow: 0px 0px 15px rgba(214, 0, 30, 0.8);
-        }
-        #button1:active {
-            opacity: 0.6;
-        }
-        #button1:focus {
-            box-shadow: 0px 0px 25px rgba(214, 0, 30, 1);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Product card [Bike] </title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap" rel="stylesheet"><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'><link rel="stylesheet" href="./style.css">
+
 </head>
 <body>
-    <div class="container">
-        <div class="linear2"></div>
-        <div class="linear3">
-            <div class="linear4">
-                <div class="linear5">
-                    <span id="result">𝐆𝐄𝐓 𝐒𝐇𝐎𝐓𝐄</span>
-                </div>
-                <div id="textview1">TextView</div>
-                <button id="button1">𝐀𝐓𝐓𝐀𝐂𝐊</button>
-            </div>
-        </div>
+<!-- partial:index.partial.html -->
+<div id="wrap">
+  <input class="initial" type="checkbox"></input>
+  <input class="wheel1" name="wheel" type="radio"></input>
+  <input class="wheel2" name="wheel" type="radio"></input>
+  <input class="wheel3" name="wheel" type="radio"></input>
+  <input class="wheel4" name="wheel" type="radio"></input>
+  <input class="buy" type="checkbox"></input>
+  <h1>Configure the Bike</h1>
+  <h2>Added to Cart</h2>
+  <h3>Wheels</h3>
+
+    <div class="wheeltoggle"></div>
+    <div class="wheeltoggle"></div>
+    <div class="wheeltoggle"></div>
+    <div class="wheeltoggle"></div>
+ 
+  <div class="buy"></div>
+  <div class="toggle expand">
+    <i class="fas fa-bicycle"></i>
+  </div>
+  <div class="toggle">
+    <i class="fas fa-bicycle"></i>
+  </div>
+  <div class="background"></div>
+  <div class="frame">
+    <div class="rear"></div>
+    <div class="stem"></div>
+    <div class="shaft"></div>
+    <div class="seat"></div>
+    <div class="wheel one front">
+      <div class="inner"></div>
     </div>
-
-    <script>
-        // Live clock for textview1
-        function updateClock() {
-            let now = new Date();
-            let formattedTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-            document.getElementById('textview1').innerText = formattedTime;
-        }
-        setInterval(updateClock, 1000);
-        updateClock(); // Initial call to set the clock
-
-        // Handle button click event
-        document.getElementById('button1').addEventListener('click', function() {
-            let button = this;
-            let result = document.getElementById('result');
-
-            // Simulate vibration effect (optional, works only on mobile devices)
-            if (navigator.vibrate) {
-                navigator.vibrate(200);
-            }
-
-            // Hide button for 35 seconds
-            button.style.display = 'none';
-            setTimeout(() => {
-                button.style.display = 'block';
-            }, 35000);
-
-            // Change result text to "ATTACKING..."
-            result.innerText = "𝐀𝐓𝐓𝐀𝐂𝐊𝐈𝐍𝐆....";
-
-            // After 3.5 seconds, predict "SMALL" or "BIG"
-            setTimeout(() => {
-                let randomNum = Math.floor(Math.random() * 10);
-                let trend = randomNum < 5 ? "𝚂𝙼𝙰𝙻𝙻" : "𝙱𝙸𝙶";
-                result.innerText = trend;
-                console.log("Predicted trend:", trend);
-            }, 3500);
-        });
-    </script>
+    <div class="wheel one back">
+      <div class="inner"></div>
+    </div>
+  </div>
+</div>
+<!-- partial -->
+  
 </body>
 </html>
