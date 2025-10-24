@@ -1,218 +1,159 @@
-
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ANIL VIP MOD</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> RABIT MOD </title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    font-family: 'Courier New', monospace;
+    color: white;
+    text-align: center;
+  }
 
-    /* Rolling Animation */
-    .rolling-text {
-      font-size: 36px;
-      font-weight: bold;
-      color: #007bff;
-      text-align: center;
-      animation: roll 5s infinite linear;
-    }
-    @keyframes roll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(100%); }
-    }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 30px 10px;
+  }
 
-    /* Drawer */
-    .drawer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 250px;
-      height: 100%;
-      background: #333;
-      color: white;
-      padding: 20px;
-      display: none;
-      z-index: 1000;
-    }
-    .drawer a {
-      color: white;
-      text-decoration: none;
-      margin: 15px 0;
-      display: block;
-    }
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      z-index: 999;
-    }
+  .logo img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    box-shadow: 0 0 40px #ff004c;
+    border: 2px solid #111;
+    animation: pulse 2s infinite alternate;
+  }
 
-    /* General UI */
-    .container {
-      margin-top: 50px;
-    }
+  @keyframes pulse {
+    from { box-shadow: 0 0 25px #ff004c; }
+    to { box-shadow: 0 0 50px #00ffff; }
+  }
 
-    .random-names {
-      font-size: 14px;
-      margin-top: 20px;
-      max-height: 150px;
-      overflow-y: auto;
-    }
+  h1 {
+    color: #ff00cc;
+    font-size: 26px;
+    margin-top: 20px;
+  }
 
-    .online-members {
-      font-size: 16px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
+  h2 {
+    color: #00bfff;
+    font-size: 20px;
+    margin-bottom: 25px;
+  }
+
+  .generate-box {
+    border: 1px solid #00ffff55;
+    padding: 10px;
+    margin: 10px auto;
+    width: 80%;
+    max-width: 320px;
+    border-radius: 10px;
+    font-size: 16px;
+    color: #ccc;
+    transition: 0.3s;
+    min-height: 40px;
+  }
+
+  .btn {
+    background-color: transparent;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    padding: 12px 28px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn:hover {
+    background-color: #00ffff;
+    color: #000;
+    box-shadow: 0 0 15px #00ffff;
+  }
+
+  .telegram-box {
+    margin-top: 30px;
+    border: 1px solid #ff00ff55;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .telegram-box p {
+    color: #ff00ff;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .telegram-btn {
+    background: linear-gradient(90deg, #ff00cc, #00ffff);
+    color: #000;
+    font-weight: bold;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .telegram-btn:hover {
+    transform: scale(1.05);
+  }
+
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="bg-dark text-white text-center py-3">
-    <h1 class="rolling-text">ANIL VIP MOD</h1>
-  </header>
 
-  <!-- Login Page -->
-  <div class="container" id="loginPage">
-    <div class="card mx-auto" style="max-width: 400px;">
-      <div class="card-body">
-        <h3 class="card-title text-center">ENTER USERNAME AND PASSWORD</h3>
-        <form id="loginForm">
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" id="username" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" id="password" class="form-control" required>
-          </div>
-          <button type="submit" class="btn btn-primary w-100">LOGIN</button>
-        </form>
-        <div class="online-members text-center mt-4">
-          Online Members: <span id="randomOnlineLogin"></span>
-        </div>
-      </div>
-    </div>
+<div class="container">
+  <div class="logo">
+    <img src="https://i.supaimg.com/e30b912d-0ee3-4ad9-a4b1-4a698278953c.jpg" alt="Logo">
   </div>
 
-  <!-- Drawer -->
-  <div class="drawer" id="drawer">
-    <h3>Menu</h3>
-    <a href="https://t.me/+O627z3wgMYBiYmI1">Developer</a>
-    <a href="https://t.me/+O627z3wgMYBiYmI1">Join Channel</a>
-    <a href="#">Buy Private Mod</a>
+  <h1>RABIT MOD</h1>
+  <h2>V2-AIMKILL</h2>
+
+  <div class="generate-box" id="generateBox">– Press Generate –</div>
+  <button class="btn" onclick="generateKey()">GENERATE KEY</button>
+  <button class="btn" onclick="copyKey()">COPY KEY</button>
+
+  <div class="telegram-box">
+    <p> ❤️ Any Problem? Join Telegram ❤️</p>
+    <button class="telegram-btn" onclick="window.open('https://t.me/jinimod', '_blank')">Join Now</button>
   </div>
-  <div class="overlay" id="overlay"></div>
+</div>
 
-  <!-- Prediction Page -->
-  <div class="container" id="ionPage" style="display: none;">
-    <div class="text-center">
-      <h1 class="rolling-text">ANIL VIP MOD</h1>
-    </div>
-    <div class="mt-5">
-      <label for="ionInput" class="form-label">ENTER LAST 3 DIGIT OF PERIOD NUMBER:</label>
-      <input type="number" id="ionInput" class="form-control" maxlength="3" required>
-      <button class="btn btn-success w-100 mt-3" id="Button">RESULT</button>
-      <p id="error" class="text-danger mt-2"></p>
-    </div>
-    <div class="mt-4">
-      <h4>PLAYER WINNING:</h4>
-      <ul id="randomWinners" class="random-names"></ul>
-    </div>
-    <div class="online-members">
-      Online Members: <span id="randomOnlinePrediction"></span>
-    </div>
-    <div class="mt-4">
-      <button id="lossButton" class="btn btn-danger">Loss</button>
-      <button id="winButton" class="btn btn-success">Win</button>
-      <p class="mt-2">Loss : <span id="lossCount">0</span> | Win : <span id="winCount">0</span></p>
-    </div>
-    <div class="mt-4">
-      <select class="form-select">
-        <option>51 Game</option>
-        <option>BDG WIN</option>
-        <option>91 CLUB</option>
-        <option>GOA GAME</option>
-        <option>BIG KOLKATA</option>
-        <option>DM WIN</option>
-        <option>DIU WIN</option>
-        <option>SIKKIM</option>
-        <option>82 LOTTERY</option>
-        <option>TIRANGA</option>
-        <option>TC LOTTERY</option>
-        <option>IN999</option>
-        <option>BIG MUMBAI</option>
-        <option>BHARAT CLUB</option>
-      </select>
-    </div>
-  </div>
+<script>
+  function generateKey() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let key = "";
+    for (let i = 0; i < 16; i++) {
+      key += chars.charAt(Math.floor(Math.random() * chars.length));
+      if ((i + 1) % 4 === 0 && i < 15) key += "-";
+    }
+    document.getElementById("generateBox").innerHTML = "🔑 <b>" + key + "</b>";
+  }
 
-  <script>
-    // Random Online Members
-    const randomOnlineMembers = () => Math.floor(Math.random() * 1000 + 1);
-    setInterval(() => {
-      document.getElementById("randomOnlineLogin").textContent = randomOnlineMembers();
-      document.getElementById("randomOnlinePrediction").textContent = randomOnlineMembers();
-    }, 1000);
+  function copyKey() {
+    const keyText = document.getElementById("generateBox").innerText.replace("🔑", "").trim();
+    if (keyText && keyText !== "– Press Generate –") {
+      navigator.clipboard.writeText(keyText);
+      alert("✅ Key copied: " + keyText);
+    } else {
+      alert("⚠️ Please generate a key first!");
+    }
+  }
+</script>
 
-    // Login Functionality
-    document.getElementById("loginForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      if (username === "ANIL" && password === "BHOI") {
-        document.getElementById("loginPage").style.display = "none";
-        document.getElementById("ionPage").style.display = "block";
-      } else {
-        alert("Invalid Credentials!");
-      }
-    });
-
-    // Prediction Functionality
-    document.getElementById("Button").addEventListener("click", () => {
-      const input = document.getElementById("ionInput").value;
-      if (input.length === 3) {
-        document.getElementById("error").textContent = "";
-        const ion = Math.random() < 0.5 ? "BIG🕸️" : "SMALL";
-        alert(`RESULT: ${ion}`);
-      } else {
-        document.getElementById("error").textContent = "PLEASE ENTER LAST 3 DIGIT OF PERIOD NUMBER";
-      }
-    });
-
-    // Random Winners
-    const names = ["BN LAST KING", "EVA", "JEMES", "TKS", "ISHANT", "LZR", "MDX" ,"ROHIT BHAI"];
-    const prices = [1000, 2000, 5000, 3000, 7000, 400, 7600];
-    const randomWinners = document.getElementById("randomWinners");
-    setInterval(() => {
-      randomWinners.innerHTML = "";
-      for (let i = 0; i < 1; i++) {
-        const name = names[Math.floor(Math.random() * names.length)];
-        const price = prices[Math.floor(Math.random() * prices.length)];
-        const li = document.createElement("li");
-        li.textContent = `${name} won ₹${price}`;
-        randomWinners.appendChild(li);
-      }
-    }, 1000);
-
-    // Click Count
-    let lossCount = 0;
-    let winCount = 0;
-    document.getElementById("lossButton").addEventListener("click", () => {
-      document.getElementById("lossCount").textContent = ++lossCount;
-    });
-    document.getElementById("winButton").addEventListener("click", () => {
-      document.getElementById("winCount").textContent = ++winCount;
-    });
-  </script>
 </body>
 </html>
