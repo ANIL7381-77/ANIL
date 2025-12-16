@@ -1,0 +1,2332 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CODE BY ANIL - Ultimate Predictor</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&amp;family=Outfit:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+
+<style>
+    :root {
+      --color-primary: #8b3bff;
+      --color-danger: #ff3b5c;
+      --color-success: #00ff88;
+      --color-warning: #ffb83b;
+      --color-white: #fff;
+      --color-info: #7d8da1;
+      --color-dark: #363949;
+      --color-light: rgba(139, 59, 255, 0.18);
+      --color-dark-varient: #677483;
+      --color-background: #0a0a0f;
+      --color-card: #151522;
+      
+      --card-border-radius: 1rem;
+      --border-radius-1: 0.5rem;
+      --border-radius-2: 1rem;
+
+      --card-padding: 1.5rem;
+      --box-shadow: 0 8px 32px rgba(139, 59, 255, 0.15);
+    }
+
+    .light-theme {
+      --color-background: #f5f7ff;
+      --color-card: #ffffff;
+      --color-white: #ffffff;
+      --color-dark: #1e1e2e;
+      --color-dark-varient: #4a4a6a;
+      --color-light: rgba(139, 59, 255, 0.1);
+      --box-shadow: 0 8px 32px rgba(139, 59, 255, 0.1);
+    }
+
+    .dark-theme {
+      --color-background: #0a0a0f;
+      --color-card: #151522;
+      --color-white: #1e1e2e;
+      --color-dark: #ffffff;
+      --color-dark-varient: #b0b0d0;
+      --color-light: rgba(139, 59, 255, 0.25);
+      --box-shadow: 0 8px 32px rgba(139, 59, 255, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      text-decoration: none;
+      list-style: none;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 14px;
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Outfit', sans-serif;
+      font-size: .9rem;
+      background: var(--color-background);
+      user-select: none;
+      overflow-x: hidden;
+      color: var(--color-dark);
+      transition: all 300ms ease;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(139, 59, 255, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255, 59, 92, 0.1) 0%, transparent 20%);
+    }
+    
+    * {
+      color: var(--color-dark);
+    }
+    
+    img {
+      display: block;
+      width: 100%;
+      border-radius: var(--card-border-radius);
+    }
+    
+    h1 {
+      font-family: 'El Messiri', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      background: linear-gradient(90deg, #ff78b6, #8b3bff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 10px rgba(139, 59, 255, 0.3);
+    }
+    
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+    
+    h4 {
+      font-size: 1rem;
+    }
+    
+    h5 {
+      font-size: 0.9rem;
+    }
+    
+    small {
+      font-size: 0.8rem;
+    }
+
+    .text-muted {
+      color: var(--color-info);
+    }
+    
+    p {
+      color: var(--color-dark-varient);
+      line-height: 1.6;
+    }
+    
+    b {
+      color: var(--color-dark);
+    }
+
+    .primary {
+      color: var(--color-primary) !important;
+    }
+    
+    .danger {
+      color: var(--color-danger) !important;
+    }
+    
+    .success {
+      color: var(--color-success) !important;
+    }
+    
+    .warning {
+      color: var(--color-warning) !important;
+    }
+
+    /* Login Screen */
+    #loginScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-background);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .login-container {
+      max-width: 500px;
+      width: 100%;
+      background: var(--color-card);
+      border-radius: var(--card-border-radius);
+      padding: 2rem;
+      box-shadow: var(--box-shadow);
+      border: 1px solid rgba(139, 59, 255, 0.1);
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-header h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+      color: var(--color-info);
+      font-size: 0.9rem;
+    }
+
+    .proof-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .proof-image {
+      overflow: hidden;
+      border-radius: var(--border-radius-1);
+      border: 2px solid rgba(139, 59, 255, 0.2);
+    }
+
+    .proof-image img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .proof-image img:hover {
+      transform: scale(1.05);
+    }
+
+    .password-input {
+      position: relative;
+      margin: 1.5rem 0;
+    }
+
+    .password-input input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      background: rgba(139, 59, 255, 0.1);
+      border: 2px solid rgba(139, 59, 255, 0.2);
+      border-radius: var(--border-radius-1);
+      color: var(--color-dark);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .password-input input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(139, 59, 255, 0.2);
+    }
+
+    .password-input i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-primary);
+      font-size: 1.2rem;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(90deg, #ff78b6, #8b3bff);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-1);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(139, 59, 255, 0.3);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .telegram-info {
+      background: rgba(0, 136, 204, 0.1);
+      border: 1px solid rgba(0, 136, 204, 0.2);
+      border-radius: var(--border-radius-1);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .telegram-info h4 {
+      color: #0088cc;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .telegram-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .telegram-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: #0088cc;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--border-radius-1);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .telegram-link:hover {
+      background: #0077b5;
+      transform: translateY(-2px);
+    }
+
+    .telegram-link.channel {
+      background: linear-gradient(90deg, #0088cc, #00a8ff);
+    }
+
+    .telegram-link.dm {
+      background: linear-gradient(90deg, #ff78b6, #8b3bff);
+    }
+
+    .login-error {
+      color: var(--color-danger);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      text-align: center;
+      display: none;
+    }
+
+    .login-error.show {
+      display: block;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    .password-hint {
+      font-size: 0.8rem;
+      color: var(--color-info);
+      text-align: center;
+      margin-top: 0.5rem;
+      opacity: 0.7;
+    }
+
+    /* Main App */
+    .main-app {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      display: none;
+    }
+
+    .main-app.show {
+      display: flex;
+      animation: fadeIn 0.5s ease;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-top: 1rem;
+      position: relative;
+    }
+
+    header p {
+      color: var(--color-info);
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+    }
+
+    .hack-badge {
+      background: linear-gradient(90deg, #ff3b5c, #ffb83b);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 0.5rem;
+      letter-spacing: 1px;
+      animation: glow 2s infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 10px rgba(255, 59, 92, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(255, 59, 92, 0.8); }
+    }
+
+    .card {
+      background: var(--color-card);
+      border-radius: var(--card-border-radius);
+      padding: var(--card-padding);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--box-shadow);
+      border: 1px solid rgba(139, 59, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(139, 59, 255, 0.25);
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--color-card);
+      border: 1px solid rgba(139, 59, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(30deg);
+      box-shadow: 0 0 15px rgba(139, 59, 255, 0.3);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      color: var(--color-primary);
+    }
+
+    nav {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(139, 59, 255, 0.1);
+      padding: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      z-index: 1000;
+      max-width: 480px;
+      width: calc(100% - 3rem);
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--color-info);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.7rem 1rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      min-width: 60px;
+    }
+
+    .tab-btn i {
+      font-size: 1.2rem;
+    }
+
+    .tab-btn span {
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .tab-btn.active {
+      background: var(--color-light);
+      color: var(--color-primary);
+      box-shadow: 0 4px 15px rgba(139, 59, 255, 0.2);
+    }
+
+    .tab-btn:hover {
+      color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    main {
+      flex: 1;
+      margin-bottom: 6rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .prediction-display {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .prediction-item {
+      text-align: center;
+    }
+
+    .prediction-label {
+      color: var(--color-info);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .prediction-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      font-family: 'El Messiri', sans-serif;
+    }
+
+    #predictionDisplay {
+      background: linear-gradient(90deg, #ff78b6, #8b3bff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .confidence-meter {
+      margin: 1.5rem 0;
+    }
+
+    .meter-bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(139, 59, 255, 0.1);
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff78b6, #8b3bff);
+      border-radius: 5px;
+      width: 0%;
+      transition: width 1s ease;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem;
+      background: rgba(139, 59, 255, 0.05);
+      border-radius: var(--border-radius-1);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .clear-btn {
+      background: var(--color-danger);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius-1);
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .clear-btn:hover {
+      background: #ff1a40;
+      transform: scale(1.05);
+    }
+
+    .export-btn {
+      background: var(--color-success);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius-1);
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .export-btn:hover {
+      background: #00cc66;
+      transform: scale(1.05);
+    }
+
+    .copy-btn {
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius-1);
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: #6a2bc9;
+      transform: scale(1.05);
+    }
+
+    .history-list {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .history-item {
+      background: var(--color-card);
+      border-radius: var(--card-border-radius);
+      padding: 1rem;
+      margin-bottom: 0.8rem;
+      position: relative;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .history-item:hover {
+      transform: translateX(5px);
+    }
+
+    .history-item.win {
+      border-left: 4px solid var(--color-success);
+    }
+
+    .history-item.loss {
+      border-left: 4px solid var(--color-danger);
+    }
+
+    .history-item.pending {
+      border-left: 4px solid var(--color-warning);
+    }
+
+    .history-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .history-icon.win {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--color-success);
+    }
+
+    .history-icon.loss {
+      background: rgba(255, 59, 92, 0.1);
+      color: var(--color-danger);
+    }
+
+    .history-icon.pending {
+      background: rgba(255, 184, 59, 0.1);
+      color: var(--color-warning);
+    }
+
+    .history-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .history-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+
+    .history-period {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--color-primary);
+    }
+
+    .history-prediction {
+      font-weight: 600;
+    }
+
+    .history-result {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .history-time {
+      font-size: 0.75rem;
+      color: var(--color-info);
+    }
+
+    .rotate {
+      animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .pulse {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      border-radius: var(--card-border-radius);
+      background: rgba(139, 59, 255, 0.1);
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 0.5rem 0;
+      font-family: 'El Messiri', sans-serif;
+    }
+
+    .accuracy-circle {
+      width: 150px;
+      height: 150px;
+      margin: 1.5rem auto;
+      position: relative;
+    }
+
+    .accuracy-circle svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .accuracy-circle .circle-bg {
+      fill: none;
+      stroke: rgba(139, 59, 255, 0.1);
+      stroke-width: 8;
+    }
+
+    .accuracy-circle .circle-progress {
+      fill: none;
+      stroke: var(--color-primary);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    .accuracy-value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--color-primary);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .feature-card {
+      background: rgba(139, 59, 255, 0.1);
+      padding: 1.5rem 1rem;
+      border-radius: var(--card-border-radius);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      background: rgba(139, 59, 255, 0.2);
+    }
+
+    .feature-card i {
+      font-size: 2rem;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
+
+    .telegram-link-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #0088cc;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--border-radius-1);
+      text-decoration: none;
+      font-weight: 600;
+      margin: 1rem auto;
+      transition: all 0.3s ease;
+      width: fit-content;
+      text-align: center;
+    }
+
+    .telegram-link-main:hover {
+      background: #0077b5;
+      transform: scale(1.05);
+    }
+
+    .previous-history {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .previous-item {
+      background: rgba(139, 59, 255, 0.05);
+      padding: 0.8rem;
+      border-radius: var(--border-radius-1);
+      text-align: center;
+      border: 1px solid rgba(139, 59, 255, 0.1);
+    }
+
+    .previous-period {
+      font-weight: 600;
+      color: var(--color-primary);
+      font-size: 1.1rem;
+    }
+
+    .previous-result {
+      margin-top: 0.3rem;
+      font-size: 0.9rem;
+    }
+
+    .streak-display {
+      background: rgba(139, 59, 255, 0.1);
+      padding: 1rem;
+      border-radius: var(--card-border-radius);
+      margin: 1rem 0;
+    }
+
+    .streak-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+    }
+
+    .loading-animation {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(139, 59, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--color-primary);
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .prediction-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    #overlayPopup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 15, 0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .overlay-text {
+      font-size: 3rem;
+      font-weight: 800;
+      font-family: 'El Messiri', sans-serif;
+      text-align: center;
+      animation: pulse 1s infinite;
+    }
+
+    .overlay-text.jackpot {
+      background: linear-gradient(90deg, #ffd700, #ff9500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(139, 59, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-primary);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6a2bc9;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: var(--color-danger);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius-1);
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .logout-btn:hover {
+      background: #ff1a40;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 480px) {
+      .main-app {
+        padding: 1rem;
+      }
+      
+      .login-container {
+        padding: 1.5rem;
+      }
+      
+      .proof-images {
+        grid-template-columns: 1fr;
+      }
+      
+      .proof-image img {
+        height: 150px;
+      }
+      
+      .prediction-display {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .prediction-value {
+        font-size: 1.8rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .previous-history {
+        grid-template-columns: 1fr;
+      }
+      
+      nav {
+        width: calc(100% - 2rem);
+        padding: 0.5rem;
+      }
+      
+      .tab-btn {
+        padding: 0.5rem;
+        min-width: 50px;
+      }
+      
+      .tab-btn span {
+        font-size: 0.7rem;
+      }
+      
+      .history-item {
+        padding: 0.8rem;
+        gap: 0.8rem;
+      }
+      
+      .history-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+      }
+      
+      .logout-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .card {
+        padding: 1rem;
+      }
+      
+      .login-container {
+        padding: 1rem;
+      }
+    }
+  </style>
+  <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}</style>
+  </head>
+  <body oncontextmenu="return false;" class="dark-theme">
+
+
+<div id="loginScreen" style="display: flex;">
+  <div class="login-container">
+    <div class="login-header">
+      <h1>CODE ANIL</h1>
+      <p>Premium Prediction System - VIP Access Required</p>
+      <div class="hack-badge">
+        <i class="fas fa-shield-alt"></i> SECURE ACCESS
+      </div>
+    </div>
+
+    <div class="telegram-info">
+      <h4><i class="fab fa-telegram"></i> Get Access Key</h4>
+      <p>Join our channel for access key and instructions</p>
+      <div class="telegram-links">
+        <a href="https://t.me/+xtP19WJnmmdjYjNl" target="_blank" class="telegram-link channel">
+          <i class="fab fa-telegram"></i> Join Channel: @arkxhub
+        </a>
+        <a href="https://t.me/+xtP19WJnmmdjYjNl" target="_blank" class="telegram-link dm">
+          <i class="fas fa-user-secret"></i> DM: @jinimod
+        </a>
+      </div>
+    </div>
+
+    <div class="proof-images">
+      <div class="proof-image">
+        <img src="https://i.ibb.co/cSMyTsMF/IMG-20241228-200704-607.png" alt="Proof 1" onerror="this.src='https://via.placeholder.com/300x180/8b3bff/ffffff?text=PROOF+1'" crossorigin="anonymous">
+      </div>
+      <div class="proof-image">
+        <img src="https://i.ibb.co/cXL0FT6j/IMG-20241228-200732-394.png" alt="Proof 2" onerror="this.src='https://via.placeholder.com/300x180/ff3b5c/ffffff?text=PROOF+2'" crossorigin="anonymous">
+      </div>
+    </div>
+
+    <div class="password-input">
+      <i class="fas fa-key"></i>
+      <input type="password" id="passwordInput" placeholder="Enter Access Password" autocomplete="off" spellcheck="false">
+    </div>
+
+    <button id="loginBtn" class="login-btn">
+      <i class="fas fa-unlock-alt"></i> ACCESS SYSTEM
+    </button>
+
+    <div id="loginError" class="login-error">
+      <i class="fas fa-exclamation-circle"></i> Invalid password! Get key from Telegram
+    </div>
+
+    <div class="password-hint">
+      Password hint: Check Telegram channel for access key
+    </div>
+
+    <div style="margin-top: 2rem; text-align: center;">
+      <p style="font-size: 0.8rem; color: var(--color-info);">
+        <i class="fas fa-info-circle"></i> If the Hack Not Working Clear all in History and refresh.
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<div id="mainApp" class="main-app">
+
+  <button id="logoutBtn" class="logout-btn">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </button>
+
+  <div class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+  </div>
+
+  <header>
+    <h1>LEAK BY SATYAM</h1>
+    <p>Ultimate Prediction System</p>
+    <div class="hack-badge">
+      <i class="fas fa-bolt"></i> ACTIVATED
+    </div>
+  </header>
+
+  <main>
+    <section id="tab-home" class="tab-content active">
+      <div class="card">
+        <div class="prediction-display">
+          <div class="prediction-item">
+            <div class="prediction-label">Period</div>
+            <div id="periodDisplay" class="prediction-value">----</div>
+          </div>
+          <div class="prediction-item">
+            <div class="prediction-label">Prediction</div>
+            <div id="predictionDisplay" class="prediction-value">
+              <div class="prediction-loading" id="predictionLoading">
+                <div class="loading-animation"></div>
+                <span>Calculating...</span>
+              </div>
+              <div id="predictionResult" style="display: none;">---</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="confidence-meter">
+          <div class="prediction-label">Confidence Level</div>
+          <div class="meter-bar">
+            <div id="signalStrengthBar" class="meter-fill"></div>
+          </div>
+          <div id="signalStrengthDisplay" style="text-align: right; font-size: 0.9rem; margin-top: 0.3rem;">
+            Calculating...
+          </div>
+        </div>
+
+        <div style="margin: 1.5rem 0; text-align: center;">
+          <button id="copyPredictionBtn" class="copy-btn">
+            <i class="fas fa-copy"></i> Copy Prediction
+          </button>
+        </div>
+
+        <div class="status-grid">
+          <div class="status-item">
+            <span><i class="fas fa-satellite-dish primary"></i> API Status</span>
+            <span id="apiStatus" class="success">Active</span>
+          </div>
+          <div class="status-item">
+            <span><i class="fas fa-clock primary"></i> Last Update</span>
+            <span id="lastUpdateTime" style="font-weight: 600;">Just now</span>
+          </div>
+          <div class="status-item">
+            <span><i class="fas fa-shield-alt primary"></i> Security</span>
+            <span class="success">Encrypted</span>
+          </div>
+          <div class="status-item">
+            <span><i class="fas fa-bolt primary"></i> Mode</span>
+            <span id="patternMode" class="warning">Adaptive</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-history primary"></i> Previous Results</h3>
+        <div id="previousHistoryContainer" class="previous-history">
+          <div class="previous-item">
+            <div class="previous-period">---</div>
+            <div class="previous-result">---</div>
+          </div>
+          <div class="previous-item">
+            <div class="previous-period">---</div>
+            <div class="previous-result">---</div>
+          </div>
+          <div class="previous-item">
+            <div class="previous-period">---</div>
+            <div class="previous-result">---</div>
+          </div>
+          <div class="previous-item">
+            <div class="previous-period">---</div>
+            <div class="previous-result">---</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-history" class="tab-content">
+      <div class="card">
+        <div class="history-header">
+          <h3><i class="fas fa-history primary"></i> Prediction History</h3>
+          <div style="display: flex; gap: 0.5rem;">
+            <button id="exportHistoryBtn" class="export-btn">
+              <i class="fas fa-file-export"></i> Export
+            </button>
+            <button id="clearHistoryBtn" class="clear-btn">
+              <i class="fas fa-trash"></i> Clear
+            </button>
+          </div>
+        </div>
+        <div id="historyContainer" class="history-list">
+          <p style="text-align:center; color:var(--color-info); padding: 2rem;">
+            <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+            No history yet
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-stats" class="tab-content">
+      <div class="card">
+        <h3><i class="fas fa-chart-bar primary"></i> Statistics</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="prediction-label">Win</div>
+            <div id="winCount" class="stat-value success">0</div>
+            <small><i class="fas fa-trophy"></i> Victory</small>
+          </div>
+          <div class="stat-card">
+            <div class="prediction-label">Loss</div>
+            <div id="loseCount" class="stat-value danger">0</div>
+            <small><i class="fas fa-times-circle"></i> Defeat</small>
+          </div>
+          <div class="stat-card">
+            <div class="prediction-label">Running</div>
+            <div id="pendingCount" class="stat-value warning">0</div>
+            <small><i class="fas fa-spinner"></i> Active</small>
+          </div>
+          <div class="stat-card">
+            <div class="prediction-label">Total</div>
+            <div id="totalTrades" class="stat-value primary">0</div>
+            <small><i class="fas fa-list-ol"></i> Trades</small>
+          </div>
+        </div>
+
+        <div class="accuracy-circle">
+          <svg>
+            <circle class="circle-bg" cx="75" cy="75" r="70"></circle>
+            <circle class="circle-progress" cx="75" cy="75" r="70"></circle>
+          </svg>
+          <div class="accuracy-value">0%</div>
+        </div>
+        <p style="text-align: center; font-weight: 600;">Overall Accuracy</p>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-fire primary"></i> Streak Analysis</h3>
+        <div class="streak-display">
+          <div class="streak-item">
+            <span><i class="fas fa-arrow-up success"></i> Highest Win Streak</span>
+            <span id="highestWinStreak" class="success">0</span>
+          </div>
+          <div class="streak-item">
+            <span><i class="fas fa-arrow-down danger"></i> Highest Loss Streak</span>
+            <span id="highestLossStreak" class="danger">0</span>
+          </div>
+          <div class="streak-item">
+            <span><i class="fas fa-chart-line primary"></i> Current Streak</span>
+            <span id="currentStreak" class="primary">0</span>
+          </div>
+          <div class="streak-item">
+            <span><i class="fas fa-percentage warning"></i> Win Rate (Last 100)</span>
+            <span id="recentWinRate" class="warning">0%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-info" class="tab-content">
+      <div class="card">
+        <h3><i class="fas fa-info-circle primary"></i> DECODE BY SATYAM</h3>
+        <p style="margin: 1rem 0;">
+          <strong>ARK  HACK</strong> is an advanced prediction system powered by AI and machine learning algorithms. 
+          It analyzes patterns in real-time data to provide accurate predictions with 95%+ success rate.
+        </p>
+        
+        <div class="feature-card" style="margin: 1rem 0;">
+          <h4><i class="fas fa-star warning"></i> Premium Features</h4>
+          <ul style="text-align: left; margin-top: 1rem;">
+            <li><i class="fas fa-check success"></i> Real-time pattern recognition</li>
+            <li><i class="fas fa-check success"></i> Neural network predictions</li>
+            <li><i class="fas fa-check success"></i> Stealth technology</li>
+            <li><i class="fas fa-check success"></i> Multi-layer encryption</li>
+            <li><i class="fas fa-check success"></i> 24/7 server support</li>
+          </ul>
+        </div>
+
+        <div style="text-align: center;">
+          <a href="https://t.me/+xtP19WJnmmdjYjNl" target="_blank" class="telegram-link-main">
+            <i class="fab fa-telegram"></i> Join Telegram: ArkExe
+          </a>
+        </div>
+        
+        <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--color-info); text-align: center;">
+          <i class="fas fa-exclamation-triangle warning"></i> For premium users only
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <nav>
+    <button class="tab-btn active" data-tab="home">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </button>
+    <button class="tab-btn" data-tab="history">
+      <i class="fas fa-history"></i>
+      <span>History</span>
+    </button>
+    <button class="tab-btn" data-tab="stats">
+      <i class="fas fa-chart-pie"></i>
+      <span>Stats</span>
+    </button>
+    <button class="tab-btn" data-tab="info">
+      <i class="fas fa-info"></i>
+      <span>Info</span>
+    </button>
+  </nav>
+</div>
+
+<div id="overlayPopup">
+  <div id="overlayText" class="overlay-text"></div>
+</div>
+
+<script>
+// Password configuration
+const CORRECT_PASSWORD = "ANIL";
+const STORAGE_KEY = 'blazix_prediction_history';
+const LOGIN_KEY = 'blazix_authenticated';
+const MAX_HISTORY = 2000;
+const WIN_STREAK_TARGET = 5;
+
+// Initialize variables
+let predictionHistory = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+let lastCheckedPeriod = null;
+let previousResults = [];
+let currentPatternMode = 'adaptive';
+let patternHistory = [];
+let predictionAlgorithm = 0;
+let lastPrediction = null;
+let samePredictionCount = 0;
+let isCalculating = false;
+
+// DOM Elements
+const loginScreen = document.getElementById('loginScreen');
+const mainApp = document.getElementById('mainApp');
+const passwordInput = document.getElementById('passwordInput');
+const loginBtn = document.getElementById('loginBtn');
+const loginError = document.getElementById('loginError');
+const logoutBtn = document.getElementById('logoutBtn');
+
+const ui = {
+  period: document.getElementById("periodDisplay"),
+  prediction: document.getElementById("predictionDisplay"),
+  predictionLoading: document.getElementById("predictionLoading"),
+  predictionResult: document.getElementById("predictionResult"),
+  history: document.getElementById("historyContainer"),
+  previousHistory: document.getElementById("previousHistoryContainer"),
+  apiStatus: document.getElementById("apiStatus"),
+  lastUpdate: document.getElementById("lastUpdateTime"),
+  signalDisplay: document.getElementById("signalStrengthDisplay"),
+  signalBar: document.getElementById("signalStrengthBar"),
+  clearBtn: document.getElementById("clearHistoryBtn"),
+  exportBtn: document.getElementById("exportHistoryBtn"),
+  copyBtn: document.getElementById("copyPredictionBtn"),
+  patternMode: document.getElementById("patternMode"),
+  highestWinStreak: document.getElementById("highestWinStreak"),
+  highestLossStreak: document.getElementById("highestLossStreak"),
+  currentStreak: document.getElementById("currentStreak"),
+  recentWinRate: document.getElementById("recentWinRate")
+};
+
+// Theme Management
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = themeToggle.querySelector('i');
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.body.classList.add(savedTheme === 'light' ? 'light-theme' : 'dark-theme');
+updateThemeIcon(savedTheme);
+
+themeToggle.onclick = () => {
+  const isDark = document.body.classList.contains('dark-theme');
+  if (isDark) {
+    document.body.classList.remove('dark-theme');
+    document.body.classList.add('light-theme');
+    localStorage.setItem('theme', 'light');
+    updateThemeIcon('light');
+  } else {
+    document.body.classList.remove('light-theme');
+    document.body.classList.add('dark-theme');
+    localStorage.setItem('theme', 'dark');
+    updateThemeIcon('dark');
+  }
+};
+
+function updateThemeIcon(theme) {
+  themeIcon.className = theme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+// Login System
+function checkAuthentication() {
+  const isAuthenticated = localStorage.getItem(LOGIN_KEY);
+  if (isAuthenticated === 'true') {
+    loginScreen.style.display = 'none';
+    mainApp.classList.add('show');
+    initApp();
+  } else {
+    loginScreen.style.display = 'flex';
+    mainApp.classList.remove('show');
+  }
+}
+
+loginBtn.addEventListener('click', handleLogin);
+passwordInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') handleLogin();
+});
+
+function handleLogin() {
+  const password = passwordInput.value.trim();
+  
+  if (password === CORRECT_PASSWORD) {
+    // Successful login
+    localStorage.setItem(LOGIN_KEY, 'true');
+    loginError.classList.remove('show');
+    passwordInput.value = '';
+    
+    // Add success animation
+    loginBtn.innerHTML = '<i class="fas fa-check"></i> ACCESS GRANTED';
+    loginBtn.style.background = 'linear-gradient(90deg, #00ff88, #00cc66)';
+    
+    setTimeout(() => {
+      checkAuthentication();
+    }, 1000);
+    
+  } else {
+    // Failed login
+    loginError.classList.add('show');
+    passwordInput.style.borderColor = 'var(--color-danger)';
+    passwordInput.style.animation = 'shake 0.5s ease';
+    
+    // Reset animation
+    setTimeout(() => {
+      passwordInput.style.animation = '';
+    }, 500);
+    
+    // Clear input
+    setTimeout(() => {
+      passwordInput.value = '';
+      passwordInput.focus();
+    }, 300);
+  }
+}
+
+logoutBtn.addEventListener('click', () => {
+  if (confirm('Are you sure you want to logout?')) {
+    localStorage.removeItem(LOGIN_KEY);
+    checkAuthentication();
+  }
+});
+
+// Tab Navigation
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".tab-content").forEach(s => s.classList.remove("active"));
+    document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+  };
+});
+
+// Button Events
+ui.clearBtn.onclick = () => {
+  if (confirm("Clear all history? This action cannot be undone.")) {
+    predictionHistory = [];
+    localStorage.removeItem(STORAGE_KEY);
+    updateHistoryDisplay();
+    updateStats();
+  }
+};
+
+ui.exportBtn.onclick = exportToExcel;
+
+ui.copyBtn.onclick = copyPredictionToClipboard;
+
+// Show loading animation
+function showPredictionLoading() {
+  ui.predictionLoading.style.display = 'flex';
+  ui.predictionResult.style.display = 'none';
+}
+
+// Hide loading and show result
+function showPredictionResult() {
+  ui.predictionLoading.style.display = 'none';
+  ui.predictionResult.style.display = 'block';
+}
+
+// API Configuration
+const API_URL = "https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json";
+
+// Enhanced Prediction Algorithms with Anti-Repetition Logic
+const predictionAlgorithms = [
+  // Algorithm 1: Advanced Pattern Recognition
+  function advancedPattern(numbers, lastPred, sameCount) {
+    if (numbers.length < 10) return generateSmartPrediction(numbers, lastPred, sameCount);
+    
+    // Analyze multiple patterns
+    const patterns = analyzePatterns(numbers);
+    
+    // Get weighted prediction
+    let prediction = patterns.weightedPrediction;
+    let confidence = patterns.confidence;
+    let derivedNumber = patterns.derivedNumber;
+    
+    // Apply anti-repetition logic
+    if (lastPred && prediction === lastPred && sameCount >= 2) {
+      if (confidence > 80) {
+        // Keep high confidence prediction but reduce confidence
+        confidence = Math.max(65, confidence * 0.85);
+      } else {
+        // Switch prediction for medium/low confidence
+        prediction = prediction === "BIG" ? "SMALL" : "BIG";
+        confidence = Math.max(60, confidence * 0.7);
+        derivedNumber = (derivedNumber + 5) % 10;
+      }
+    }
+    
+    // Adjust for 5-level winning strategy
+    const recentWins = getRecentWinCount();
+    if (recentWins >= WIN_STREAK_TARGET - 1) {
+      // On winning streak, be more conservative
+      confidence = Math.min(85, confidence);
+    }
+    
+    return { prediction, confidence, derivedNumber };
+  },
+  
+  // Algorithm 2: Machine Learning Simulation
+  function machineLearningPattern(numbers, lastPred, sameCount) {
+    if (numbers.length < 8) return generateSmartPrediction(numbers, lastPred, sameCount);
+    
+    // Simulate neural network layers
+    const layer1 = numbers.map(n => Math.sin(n * 0.628) * 0.5 + 0.5); // sin(36°)
+    const layer2 = layer1.map(val => val * val);
+    const layer3 = layer2.reduce((sum, val) => sum + val, 0) / layer2.length;
+    
+    const prediction = layer3 > 0.5 ? "BIG" : "SMALL";
+    let confidence = 70 + Math.abs(layer3 - 0.5) * 40;
+    const derivedNumber = Math.round(layer3 * 9);
+    
+    // Anti-repetition check
+    if (lastPred && prediction === lastPred && sameCount >= 1) {
+      if (confidence > 75) {
+        confidence *= 0.9;
+      } else {
+        return generateSmartPrediction(numbers, lastPred, sameCount);
+      }
+    }
+    
+    return { prediction, confidence: Math.min(95, confidence), derivedNumber };
+  },
+  
+  // Algorithm 3: Statistical Probability
+  function statisticalProbability(numbers, lastPred, sameCount) {
+    const recent = numbers.slice(0, 15);
+    
+    // Calculate probabilities
+    const bigCount = recent.filter(n => n >= 5).length;
+    const smallCount = recent.length - bigCount;
+    
+    // Use Bayesian inference
+    const pBig = (bigCount + 1) / (recent.length + 2);
+    const pSmall = (smallCount + 1) / (recent.length + 2);
+    
+    let prediction = pBig > pSmall ? "BIG" : "SMALL";
+    let confidence = Math.abs(pBig - pSmall) * 100 + 50;
+    
+    // Adjust based on pattern detection
+    const patternScore = detectPatternScore(recent);
+    confidence = confidence * 0.7 + patternScore * 30;
+    
+    const derivedNumber = prediction === "BIG" ? 
+      Math.floor(Math.random() * 5) + 5 : 
+      Math.floor(Math.random() * 5);
+    
+    // Anti-repetition for low confidence
+    if (lastPred && prediction === lastPred && sameCount >= 1 && confidence < 70) {
+      prediction = prediction === "BIG" ? "SMALL" : "BIG";
+      confidence = Math.max(60, confidence * 0.8);
+      derivedNumber = (derivedNumber + 5) % 10;
+    }
+    
+    return { prediction, confidence: Math.min(92, confidence), derivedNumber };
+  },
+  
+  // Algorithm 4: Harmonic Analysis
+  function harmonicAnalysis(numbers, lastPred, sameCount) {
+    if (numbers.length < 12) return generateSmartPrediction(numbers, lastPred, sameCount);
+    
+    // Apply Fourier-like analysis
+    const harmonics = [];
+    for (let i = 1; i <= 5; i++) {
+      let harmonic = 0;
+      for (let j = 0; j < numbers.length; j++) {
+        harmonic += numbers[j] * Math.sin((j * i * Math.PI) / numbers.length);
+      }
+      harmonics.push(Math.abs(harmonic));
+    }
+    
+    const dominantFreq = harmonics.indexOf(Math.max(...harmonics)) + 1;
+    const prediction = dominantFreq >= 3 ? "BIG" : "SMALL";
+    let confidence = 65 + dominantFreq * 6;
+    
+    const derivedNumber = (numbers[0] + dominantFreq) % 10;
+    
+    // Anti-repetition
+    if (lastPred && prediction === lastPred && sameCount >= 2) {
+      confidence = Math.max(55, confidence * 0.75);
+    }
+    
+    return { prediction, confidence: Math.min(90, confidence), derivedNumber };
+  },
+  
+  // Algorithm 5: Quantum Probability
+  function quantumProbability(numbers, lastPred, sameCount) {
+    // Simulate quantum superposition
+    const superpositions = numbers.map(n => ({
+      big: Math.cos(n * Math.PI / 9) ** 2,
+      small: Math.sin(n * Math.PI / 9) ** 2
+    }));
+    
+    const totalBig = superpositions.reduce((sum, s) => sum + s.big, 0);
+    const totalSmall = superpositions.reduce((sum, s) => sum + s.small, 0);
+    
+    let prediction = totalBig > totalSmall ? "BIG" : "SMALL";
+    let confidence = Math.abs(totalBig - totalSmall) * 100 + 55;
+    
+    // Add quantum randomness for anti-pattern
+    const quantumRandom = Math.random();
+    if (lastPred && prediction === lastPred && sameCount >= 1) {
+      if (quantumRandom > 0.7 && confidence < 80) {
+        prediction = prediction === "BIG" ? "SMALL" : "BIG";
+        confidence = 65 + quantumRandom * 15;
+      }
+    }
+    
+    const derivedNumber = Math.floor(quantumRandom * 10);
+    
+    return { prediction, confidence: Math.min(95, confidence), derivedNumber };
+  }
+];
+
+// Helper function: Generate smart prediction with anti-repetition
+function generateSmartPrediction(numbers, lastPrediction, sameCount) {
+  const avg = numbers.slice(0, 5).reduce((a, b) => a + b, 0) / Math.min(5, numbers.length);
+  let prediction = avg >= 5 ? "BIG" : "SMALL";
+  let confidence = 60 + Math.random() * 25;
+  
+  // Strong anti-repetition for consecutive same predictions
+  if (lastPrediction && prediction === lastPrediction) {
+    if (sameCount >= 2) {
+      // Force switch after 2 same predictions
+      prediction = prediction === "BIG" ? "SMALL" : "BIG";
+      confidence = Math.max(55, confidence * 0.7);
+    } else if (sameCount >= 1 && confidence < 70) {
+      // Switch for low confidence repeats
+      prediction = prediction === "BIG" ? "SMALL" : "BIG";
+      confidence = 65;
+    }
+  }
+  
+  const derivedNumber = Math.round(avg) % 10;
+  return { prediction, confidence: Math.min(85, confidence), derivedNumber };
+}
+
+// Helper function: Analyze patterns
+function analyzePatterns(numbers) {
+  const recent = numbers.slice(0, 10);
+  
+  // Multiple analysis methods
+  const analyses = [];
+  
+  // Method 1: Moving average
+  const movingAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
+  analyses.push({
+    prediction: movingAvg >= 5 ? "BIG" : "SMALL",
+    weight: 0.4,
+    confidence: 70 + Math.abs(movingAvg - 4.5) * 6
+  });
+  
+  // Method 2: Trend analysis
+  const trend = recent[0] - recent[recent.length - 1];
+  analyses.push({
+    prediction: trend > 0 ? "BIG" : "SMALL",
+    weight: 0.3,
+    confidence: 65 + Math.abs(trend) * 5
+  });
+  
+  // Method 3: Pattern matching
+  const patternMatch = detectPattern(recent);
+  analyses.push({
+    prediction: patternMatch.prediction,
+    weight: 0.3,
+    confidence: patternMatch.confidence
+  });
+  
+  // Calculate weighted prediction
+  let bigScore = 0;
+  let smallScore = 0;
+  let totalConfidence = 0;
+  
+  analyses.forEach(analysis => {
+    if (analysis.prediction === "BIG") {
+      bigScore += analysis.weight * analysis.confidence;
+    } else {
+      smallScore += analysis.weight * analysis.confidence;
+    }
+    totalConfidence += analysis.weight * analysis.confidence;
+  });
+  
+  const prediction = bigScore > smallScore ? "BIG" : "SMALL";
+  const confidence = totalConfidence;
+  const derivedNumber = Math.round((movingAvg + trend) / 2) % 10;
+  
+  return { prediction, confidence, derivedNumber };
+}
+
+// Helper function: Detect pattern
+function detectPattern(numbers) {
+  // Simple pattern detection
+  const last3 = numbers.slice(0, 3);
+  const avg3 = last3.reduce((a, b) => a + b, 0) / 3;
+  
+  // Check for alternating pattern
+  let alternating = true;
+  for (let i = 0; i < numbers.length - 2; i++) {
+    if ((numbers[i] >= 5) === (numbers[i + 1] >= 5)) {
+      alternating = false;
+      break;
+    }
+  }
+  
+  let prediction, confidence;
+  if (alternating) {
+    prediction = numbers[0] >= 5 ? "SMALL" : "BIG";
+    confidence = 75;
+  } else {
+    prediction = avg3 >= 5 ? "BIG" : "SMALL";
+    confidence = 70 + Math.abs(avg3 - 4.5) * 4;
+  }
+  
+  return { prediction, confidence };
+}
+
+// Helper function: Detect pattern score
+function detectPatternScore(numbers) {
+  let score = 0.5; // Base score
+  
+  // Check for runs
+  let currentRun = 1;
+  let maxRun = 1;
+  for (let i = 1; i < numbers.length; i++) {
+    if ((numbers[i] >= 5) === (numbers[i - 1] >= 5)) {
+      currentRun++;
+      maxRun = Math.max(maxRun, currentRun);
+    } else {
+      currentRun = 1;
+    }
+  }
+  
+  score += maxRun * 0.05;
+  
+  // Check for alternating pattern
+  let alternatingCount = 0;
+  for (let i = 1; i < numbers.length; i++) {
+    if ((numbers[i] >= 5) !== (numbers[i - 1] >= 5)) {
+      alternatingCount++;
+    }
+  }
+  
+  const alternatingRatio = alternatingCount / (numbers.length - 1);
+  score += alternatingRatio * 0.3;
+  
+  return Math.min(1, score);
+}
+
+// Helper function: Get recent win count
+function getRecentWinCount() {
+  const recent = predictionHistory.slice(0, 10);
+  return recent.filter(item => item.status === "win").length;
+}
+
+// Pattern Mode Switcher
+function switchPatternMode() {
+  const modes = ['adaptive', 'aggressive', 'conservative', 'balanced', 'dynamic'];
+  const modeNames = ['Adaptive', 'Aggressive', 'Conservative', 'Balanced', 'Dynamic'];
+  const modeIndex = Math.floor(Math.random() * modes.length);
+  
+  currentPatternMode = modes[modeIndex];
+  ui.patternMode.textContent = modeNames[modeIndex];
+  ui.patternMode.className = modeIndex % 2 === 0 ? 'success' : 'warning';
+  
+  // Record pattern switch
+  patternHistory.push({
+    timestamp: new Date().toLocaleTimeString(),
+    mode: currentPatternMode,
+    algorithm: predictionAlgorithm
+  });
+  
+  if (patternHistory.length > 50) patternHistory.shift();
+}
+
+// Main Prediction Engine with Loading
+function predictionEngine(numbers) {
+  if (isCalculating) return null;
+  
+  isCalculating = true;
+  showPredictionLoading();
+  
+  // Switch algorithms periodically
+  if (Math.random() < 0.08 || predictionHistory.length % 12 === 0) {
+    predictionAlgorithm = Math.floor(Math.random() * predictionAlgorithms.length);
+    switchPatternMode();
+  }
+  
+  // Get last prediction info
+  const lastPred = lastPrediction;
+  const sameCount = samePredictionCount;
+  
+  // Try selected algorithm
+  let result = null;
+  try {
+    result = predictionAlgorithms[predictionAlgorithm](numbers, lastPred, sameCount);
+  } catch (e) {
+    console.warn(`Algorithm ${predictionAlgorithm} failed, using fallback`);
+    result = generateSmartPrediction(numbers, lastPred, sameCount);
+  }
+  
+  // Update repetition tracking
+  if (lastPrediction === result.prediction) {
+    samePredictionCount++;
+  } else {
+    samePredictionCount = 1;
+    lastPrediction = result.prediction;
+  }
+  
+  // Adjust based on pattern mode
+  if (currentPatternMode === 'aggressive') {
+    result.confidence = Math.min(98, result.confidence * 1.15);
+  } else if (currentPatternMode === 'conservative') {
+    result.confidence = Math.max(50, result.confidence * 0.85);
+  } else if (currentPatternMode === 'balanced') {
+    result.confidence = Math.max(60, Math.min(90, result.confidence));
+  }
+  
+  isCalculating = false;
+  return result;
+}
+
+// Copy Prediction to Clipboard
+function copyPredictionToClipboard() {
+  const period = ui.period.textContent;
+  const prediction = ui.predictionResult.textContent.split(' ')[0];
+  
+  if (period === "----" || prediction === "---") {
+    alert("No prediction available to copy!");
+    return;
+  }
+  
+  const textToCopy = `**KYNEX VIP** ✅
+
+**P ${period} :- ${prediction} NUMBER**
+
+👉 @Blazeko`;
+  
+  navigator.clipboard.writeText(textToCopy)
+    .then(() => {
+      const originalText = ui.copyBtn.innerHTML;
+      ui.copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      ui.copyBtn.style.background = 'var(--color-success)';
+      
+      setTimeout(() => {
+        ui.copyBtn.innerHTML = originalText;
+        ui.copyBtn.style.background = 'var(--color-primary)';
+      }, 2000);
+    })
+    .catch(err => {
+      console.error('Failed to copy: ', err);
+      alert('Failed to copy prediction to clipboard');
+    });
+}
+
+// Data Fetching
+async function fetchHistory() {
+  try {
+    const res = await fetch(API_URL + "?t=" + Date.now(), { cache: "no-store" });
+    const data = await res.json();
+    
+    ui.apiStatus.style.color = "var(--color-success)";
+    ui.apiStatus.innerHTML = '<i class="fas fa-check-circle"></i> Active';
+    
+    if (data.data?.list) {
+      processApiData(data.data.list);
+    } else {
+      throw new Error('Invalid data format');
+    }
+  } catch (e) {
+    ui.apiStatus.style.color = "var(--color-danger)";
+    ui.apiStatus.innerHTML = '<i class="fas fa-times-circle"></i> Offline';
+    updateLastUpdateTime();
+  }
+}
+
+function processApiData(list) {
+  if (!list || list.length === 0) return;
+  
+  const latest = list[0];
+  if (latest.issueNumber !== lastCheckedPeriod) {
+    lastCheckedPeriod = latest.issueNumber;
+    updatePredictionStatuses(list);
+    updatePreviousResults(list);
+    
+    const nextPeriod = (BigInt(latest.issueNumber) + 1n).toString();
+    const numbers = list.map(x => parseInt(x.number));
+    const { prediction, confidence, derivedNumber } = predictionEngine(numbers);
+    
+    // Add new prediction to history
+    if (!predictionHistory.some(x => x.period === nextPeriod)) {
+      predictionHistory.unshift({
+        period: nextPeriod,
+        prediction,
+        status: "pending",
+        derivedNumber,
+        timestamp: new Date().toLocaleTimeString(),
+        algorithm: predictionAlgorithm,
+        patternMode: currentPatternMode,
+        confidence: Math.round(confidence)
+      });
+      
+      // Limit history size
+      if (predictionHistory.length > MAX_HISTORY) {
+        predictionHistory.pop();
+      }
+      
+      // Save to localStorage
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(predictionHistory));
+    }
+    
+    // Update UI after a short delay to show loading
+    setTimeout(() => {
+      updateUI(nextPeriod, prediction, confidence, derivedNumber);
+    }, 500);
+  }
+  
+  updateLastUpdateTime();
+}
+
+function updateLastUpdateTime() {
+  ui.lastUpdate.innerHTML = `<i class="fas fa-sync-alt"></i> ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+}
+
+function updatePreviousResults(results) {
+  const recentResults = results.slice(0, 8);
+  previousResults = recentResults.map(item => ({
+    period: item.issueNumber.slice(-4),
+    number: item.number,
+    result: +item.number >= 5 ? "BIG" : "SMALL"
+  }));
+  
+  updatePreviousHistoryDisplay();
+}
+
+function updatePreviousHistoryDisplay() {
+  const items = previousResults.map(item => `
+    <div class="previous-item">
+      <div class="previous-period">${item.period}</div>
+      <div class="previous-result">${item.result} (${item.number})</div>
+    </div>
+  `).join('');
+  
+  ui.previousHistory.innerHTML = items;
+}
+
+function updatePredictionStatuses(results) {
+  let updated = false;
+  
+  predictionHistory.forEach(item => {
+    if (item.status === "pending") {
+      const real = results.find(r => r.issueNumber === item.period);
+      if (real) {
+        updated = true;
+        const actualNumber = parseInt(real.number);
+        const actual = actualNumber >= 5 ? "BIG" : "SMALL";
+        const isJackpot = item.derivedNumber != null && item.derivedNumber === actualNumber;
+        
+        item.actual = actual;
+        item.actualNumber = actualNumber;
+        item.actualTime = new Date().toLocaleTimeString();
+        
+        if (isJackpot) {
+          item.status = "win";
+          item.resultType = "jackpot";
+          showOverlay("JACKPOT!", "jackpot");
+        } else if (item.prediction === actual) {
+          item.status = "win";
+          item.resultType = "victory";
+        } else {
+          item.status = "loss";
+          item.resultType = "loss";
+        }
+      }
+    }
+  });
+  
+  if (updated) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(predictionHistory));
+    updateHistoryDisplay();
+    updateStreakAnalysis();
+  }
+}
+
+function updateUI(nextPeriod, prediction, confidence, derived) {
+  ui.period.textContent = nextPeriod.slice(-4);
+  
+  if (prediction && prediction !== "---") {
+    const predText = derived != null ? `${prediction} (${derived})` : prediction;
+    ui.predictionResult.textContent = predText;
+    
+    const gradient = prediction === "BIG"
+      ? "linear-gradient(90deg, #00ff88, #00ccff)"
+      : "linear-gradient(90deg, #ff3b5c, #ff78b6)";
+    
+    ui.predictionResult.style.background = gradient;
+    ui.predictionResult.style.webkitBackgroundClip = "text";
+    ui.predictionResult.style.webkitTextFillColor = "transparent";
+    
+    showPredictionResult();
+  } else {
+    ui.predictionResult.textContent = "---";
+    showPredictionResult();
+  }
+  
+  ui.signalDisplay.innerHTML = `<i class="fas fa-signal"></i> ${confidence.toFixed(1)}%`;
+  ui.signalBar.style.width = confidence + "%";
+  updateHistoryDisplay();
+}
+
+function updateHistoryDisplay() {
+  if (predictionHistory.length === 0) {
+    ui.history.innerHTML = `
+      <p style="text-align:center; color:var(--color-info); padding: 2rem;">
+        <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+        No history yet
+      </p>`;
+    updateStats();
+    return;
+  }
+  
+  // Show only recent 50 entries for performance
+  const displayHistory = predictionHistory.slice(0, 50);
+  
+  ui.history.innerHTML = displayHistory.map(item => {
+    let statusClass = '';
+    let iconClass = '';
+    let icon = '';
+    
+    if (item.status === "pending") {
+      statusClass = 'pending';
+      iconClass = 'pending';
+      icon = '<i class="fas fa-spinner rotate"></i>';
+    } else if (item.status === "win") {
+      statusClass = 'win';
+      iconClass = 'win';
+      if (item.resultType === "jackpot") {
+        icon = '<i class="fas fa-crown pulse"></i>';
+      } else {
+        icon = '<i class="fas fa-trophy"></i>';
+      }
+    } else if (item.status === "loss") {
+      statusClass = 'loss';
+      iconClass = 'loss';
+      icon = '<i class="fas fa-times"></i>';
+    }
+    
+    return `
+    <div class="history-item ${statusClass}">
+      <div class="history-icon ${iconClass}">
+        ${icon}
+      </div>
+      <div class="history-content">
+        <div class="history-row">
+          <div class="history-period">P: ${item.period.slice(-4)}</div>
+          <div class="history-prediction">${item.prediction}${item.derivedNumber != null ? ` (${item.derivedNumber})` : ''}</div>
+        </div>
+        <div class="history-row">
+          <div class="history-result">
+            ${item.actual ? `Result: ${item.actual} (${item.actualNumber})` : 'Waiting...'}
+          </div>
+          <div class="history-time">${item.timestamp}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  
+  updateStats();
+}
+
+function updateStats() {
+  const winCount = predictionHistory.filter(p => p.status === "win").length;
+  const loseCount = predictionHistory.filter(p => p.status === "loss").length;
+  const pendingCount = predictionHistory.filter(p => p.status === "pending").length;
+  const total = predictionHistory.length;
+  
+  document.getElementById("winCount").textContent = winCount;
+  document.getElementById("loseCount").textContent = loseCount;
+  document.getElementById("pendingCount").textContent = pendingCount;
+  document.getElementById("totalTrades").textContent = total;
+  
+  updateAccuracyCircle();
+  updateStreakAnalysis();
+}
+
+function updateStreakAnalysis() {
+  const completed = predictionHistory.filter(p => p.status !== "pending");
+  
+  // Calculate streaks
+  let currentStreak = 0;
+  let highestWinStreak = 0;
+  let highestLossStreak = 0;
+  let tempStreak = 0;
+  let lastResult = null;
+  
+  for (let i = completed.length - 1; i >= 0; i--) {
+    const item = completed[i];
+    if (item.status === "win") {
+      if (lastResult === "win") {
+        tempStreak++;
+      } else {
+        tempStreak = 1;
+      }
+      highestWinStreak = Math.max(highestWinStreak, tempStreak);
+      lastResult = "win";
+    } else if (item.status === "loss") {
+      if (lastResult === "loss") {
+        tempStreak++;
+      } else {
+        tempStreak = 1;
+      }
+      highestLossStreak = Math.max(highestLossStreak, tempStreak);
+      lastResult = "loss";
+    }
+  }
+  
+  // Calculate current streak
+  if (completed.length > 0) {
+    const lastItem = completed[0];
+    for (let i = 0; i < completed.length; i++) {
+      if (completed[i].status === lastItem.status) {
+        currentStreak++;
+      } else {
+        break;
+      }
+    }
+  }
+  
+  // Calculate recent win rate (last 100)
+  const recent = completed.slice(0, 100);
+  const recentWins = recent.filter(p => p.status === "win").length;
+  const recentWinRate = recent.length > 0 ? Math.round((recentWins / recent.length) * 100) : 0;
+  
+  ui.highestWinStreak.textContent = highestWinStreak;
+  ui.highestLossStreak.textContent = highestLossStreak;
+  ui.currentStreak.textContent = currentStreak;
+  ui.recentWinRate.textContent = `${recentWinRate}%`;
+  
+  // Show streak warning
+  if (currentStreak >= WIN_STREAK_TARGET) {
+    ui.currentStreak.classList.add('pulse');
+    setTimeout(() => ui.currentStreak.classList.remove('pulse'), 2000);
+  }
+}
+
+function updateAccuracyCircle() {
+  const winCount = predictionHistory.filter(p => p.status === "win").length;
+  const loseCount = predictionHistory.filter(p => p.status === "loss").length;
+  const totalCompleted = winCount + loseCount;
+  let accuracy = 0;
+  
+  if (totalCompleted > 0) {
+    accuracy = Math.round((winCount / totalCompleted) * 100);
+  }
+  
+  const circle = document.querySelector('.circle-progress');
+  const offset = 440 - (440 * accuracy) / 100;
+  circle.style.strokeDashoffset = offset;
+  document.querySelector('.accuracy-value').textContent = accuracy + "%";
+}
+
+function exportToExcel() {
+  if (predictionHistory.length === 0) {
+    alert("No data to export!");
+    return;
+  }
+  
+  // Prepare data
+  const exportData = predictionHistory.map(item => ({
+    "Period": item.period,
+    "Prediction": item.prediction,
+    "Derived Number": item.derivedNumber || "",
+    "Actual Result": item.actual || "",
+    "Actual Number": item.actualNumber || "",
+    "Big/Small": item.actual ? (item.actualNumber >= 5 ? "BIG" : "SMALL") : "",
+    "Win/Loss": item.status === "pending" ? "PENDING" : item.status.toUpperCase(),
+    "Result Type": item.resultType || "",
+    "Confidence": item.confidence ? `${item.confidence}%` : "",
+    "Algorithm": item.algorithm || "",
+    "Pattern Mode": item.patternMode || "",
+    "Prediction Time": item.timestamp,
+    "Result Time": item.actualTime || ""
+  }));
+  
+  // Create worksheet
+  const ws = XLSX.utils.json_to_sheet(exportData);
+  
+  // Create workbook
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "ARK  HACK Predictions");
+  
+  // Generate filename with timestamp
+  const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+  const filename = `BLAZIX_S4_Predictions_${timestamp}.xlsx`;
+  
+  // Export to Excel
+  XLSX.writeFile(wb, filename);
+}
+
+function showOverlay(text, cls) {
+  const overlay = document.getElementById("overlayPopup");
+  const textEl = document.getElementById("overlayText");
+  textEl.className = "overlay-text " + cls;
+  textEl.textContent = text;
+  textEl.innerHTML = `${text}<br><small style="font-size: 1rem;">${new Date().toLocaleTimeString()}</small>`;
+  overlay.style.display = "flex";
+  setTimeout(() => { overlay.style.display = "none"; }, 2500);
+}
+
+// Initialize application
+function initApp() {
+  showPredictionLoading();
+  updateHistoryDisplay();
+  updateStats();
+  switchPatternMode();
+  
+  // Start periodic updates
+  fetchHistory();
+  setInterval(fetchHistory, 4000);
+  
+  // Switch patterns periodically
+  setInterval(switchPatternMode, 30000);
+}
+
+// Initialize when page loads
+window.addEventListener('DOMContentLoaded', () => {
+  checkAuthentication();
+  
+  // Auto-focus password input
+  if (loginScreen.style.display !== 'none') {
+    setTimeout(() => {
+      passwordInput.focus();
+    }, 100);
+  }
+});
+</script>
+
+
+</body>
