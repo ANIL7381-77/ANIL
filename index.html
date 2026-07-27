@@ -1,184 +1,608 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ANIL - PORTFOLIO</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anil Predictor AI Pro</title>
   <style>
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, sans-serif;
     }
 
-    html, body {
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
+    body {
+      background: radial-gradient(circle at 50% 20%, #150a21 0%, #08030d 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
       color: #fff;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    video {
+    #bgCanvas {
       position: fixed;
       top: 0;
       left: 0;
-      min-width: 100%;
-      min-height: 100%;
-      object-fit: cover;
-      z-index: -2;
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0; left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: -1;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 60px 20px;
-      height: 100%;
-      overflow-y: auto;
+      z-index: 0;
+      pointer-events: none;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 40px 30px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      text-align: center;
-      max-width: 800px;
+      position: relative;
+      z-index: 1;
+      background: rgba(22, 10, 36, 0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 24px;
+      padding: 22px;
       width: 100%;
-      animation: fadeIn 1.5s ease forwards;
+      max-width: 380px;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.2), inset 0 0 15px rgba(168, 85, 247, 0.1);
+      text-align: center;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      color: #c084fc;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
     }
 
-    .profile-pic {
-      width: 140px;
-      height: 140px;
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: #00ff88;
       border-radius: 50%;
+      box-shadow: 0 0 8px #00ff88;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .logo-container {
+      position: relative;
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 10px;
+    }
+
+    .logo-ring {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px dashed #c084fc;
+      border-radius: 50%;
+      animation: spin 10s linear infinite;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    .logo {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 60px;
+      height: 60px;
+      background: #0a0412;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+      border: 1px solid rgba(168, 85, 247, 0.5);
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border: 3px solid #fff;
-      margin-bottom: 20px;
     }
 
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffffff, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
     }
 
-    p {
-      font-size: 1.1em;
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-
-    .info-box {
+    .input-box {
+      background: rgba(10, 4, 18, 0.85);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 15px;
       text-align: left;
-      margin-top: 25px;
-    }
-
-    .info-box h2 {
-      font-size: 1.5em;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #fff;
-      padding-bottom: 5px;
-    }
-
-    .info-box ul {
-      list-style: none;
-      padding: 0;
-      line-height: 1.8;
-    }
-
-    .info-box ul li::before {
-      content: "› ";
-      color: #00c6ff;
-    }
-
-    .telegram-btn {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 12px 25px;
-      background: linear-gradient(135deg, #00c6ff, #0072ff);
-      border: none;
-      border-radius: 50px;
-      color: white;
-      font-size: 1.1em;
-      text-decoration: none;
+      box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.1);
       transition: all 0.3s ease;
-      box-shadow: 0 0 10px #00c6ff;
     }
 
-    .telegram-btn:hover {
-      background: linear-gradient(135deg, #0072ff, #00c6ff);
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #00c6ff;
+    .input-box:focus-within {
+      border-color: #c084fc;
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.4);
     }
 
-    footer {
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #ccc;
+    .input-box label {
+      font-size: 11px;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .input-box input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 19px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 3px;
+      outline: none;
+    }
+
+    .error-text {
+      color: #ff3366;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .analysis-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin: 10px 0;
+      overflow: hidden;
+      display: none;
+    }
+
+    .analysis-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #a855f7, #00ff88);
+      box-shadow: 0 0 10px #00ff88;
+      transition: width 0.6s ease-in-out;
+    }
+
+    .display-card {
+      background: rgba(12, 5, 22, 0.9);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+    }
+
+    .result-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .result-label {
+      font-size: 11px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .result-val {
+      font-size: 26px;
+      font-weight: 800;
+      color: #00ff88;
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.8);
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    button, .btn-telegram {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, #a855f7, #7e22ce);
+      color: #fff;
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.4);
+      letter-spacing: 1px;
+    }
+
+    .btn-main:active {
+      transform: scale(0.96);
+    }
+
+    .btn-telegram {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(2, 132, 199, 0.4);
+      letter-spacing: 1px;
+    }
+
+    .btn-telegram:active {
+      transform: scale(0.96);
+    }
+
+    .section-title {
+      font-size: 11px;
+      color: #94a3b8;
+      text-align: left;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .history-box {
+      list-style: none;
+      max-height: 85px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+
+    .history-box li {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 5px;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .winner-box-container {
+      background: rgba(10, 4, 18, 0.9);
+      border: 1px solid rgba(0, 255, 136, 0.35);
+      border-radius: 16px;
+      padding: 12px;
+      text-align: left;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+    }
+
+    .winner-box-header {
+      font-size: 10px;
+      color: #00ff88;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .winner-feed {
+      background: linear-gradient(90deg, rgba(168,85,247,0.15), rgba(0,255,136,0.15));
+      border: 1px solid rgba(0, 255, 136, 0.25);
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .winner-feed span:first-child {
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    .winner-tag {
+      color: #00ff88;
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+    }
+
+    /* --- INTERNET OFF DIALOG BOX STYLES --- */
+    .offline-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .offline-box {
+      background: rgba(22, 10, 36, 0.95);
+      border: 1.5px solid #ff3366;
+      border-radius: 20px;
+      padding: 25px 20px;
+      text-align: center;
+      max-width: 320px;
+      width: 100%;
+      box-shadow: 0 0 30px rgba(ff, 51, 102, 0.35);
+      animation: popIn 0.3s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .offline-icon {
+      font-size: 45px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .offline-box h2 {
+      font-size: 18px;
+      color: #ff3366;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .offline-box p {
+      font-size: 14px;
+      color: #e2e8f0;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Video -->
-  <video autoplay muted loop>
-    <source src="bg.mp4" type="video/mp4" />
-    Your browser does not support HTML5 video.
-  </video>
-  <div class="overlay"></div>
+  <canvas id="bgCanvas"></canvas>
 
-  <!-- Content -->
-  <div class="container">
-    <div class="card">
-      <img src="file.png" alt="ANIL" class="profile-pic" />
-      <h1>ANIL</h1>
-      <p>Hi! I'm ANIL — a creative tech lover building bots, websites, and Telegram tools. I'm a owner of HACKING RELATED /</p>
+  <div class="offline-modal" id="offlineModal">
+    <div class="offline-box">
+      <span class="offline-icon">🛜</span>
+      <h2>Connection Lost</h2>
+      <p>Plis Turn On your internet</p>
+    </div>
+  </div>
 
-      <div class="info-box">
-        <h2>About Me</h2>
-        <ul>
-          <li><strong>Country:</strong> India</li>
-          <li><strong>Age:</strong> 16</li>
-          <li><strong>School:</strong> High School</li>
-          <li><strong>Hobbies:</strong> Coding, Gaming, Designing</li>
-        </ul>
-      </div>
-
-      <div class="info-box">
-        <h2>Skills</h2>
-        <ul>
-          <li>PHP & Python Bots</li>
-          <li>HTML, CSS, JS</li>
-          <li>Telegram Bot Development</li>
-          <li>Web UI/UX Design</li>
-          <li>Automation Systems</li>
-        </ul>
-      </div>
-
-      <a href="https://t.me/+csyo3qcWh2FjZjhl" class="telegram-btn" target="_blank">Join My Telegram</a>
+  <div class="card">
+    
+    <div class="status-badge">
+      <div class="status-dot"></div> AI SERVER ONLINE
     </div>
 
-    <footer>© 2025 ANIL. All rights reserved.</footer>
+    <div class="logo-container">
+      <div class="logo-ring"></div>
+      <div class="logo">
+        <img src="https://i.supaimg.com/e61fb938-764d-481a-b0e6-c264a72e1f17/8b8bc1e3-c820-4f58-8df9-51cd818c1c89.png" alt="Logo" id="appLogo">
+      </div>
+    </div>
+    
+    <h1>Anil Predictor</h1>
+
+    <div class="input-box">
+      <label for="periodInput">Enter Period Number (Min 3 Digits)</label>
+      <input type="number" id="periodInput" placeholder="101" oninput="hideError()">
+      <div class="error-text" id="errorText">⚠️ Minimum 3 digits required!</div>
+    </div>
+
+    <div class="analysis-bar" id="analysisBar">
+      <div class="analysis-fill" id="analysisFill"></div>
+    </div>
+
+    <div class="display-card">
+      <div class="result-item">
+        <span class="result-label">Number</span>
+        <span class="result-val" id="resNum">--</span>
+      </div>
+      <div style="width: 1px; height: 30px; background: rgba(255,255,255,0.15);"></div>
+      <div class="result-item">
+        <span class="result-label">Size</span>
+        <span class="result-val" id="resSize">--</span>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn-main" onclick="handleGenerate()">GENERATE</button>
+      <a href="https://t.me/+P5Y9wOMRF285ZDVl" target="_blank" class="btn-telegram">JOIN TELEGRAM</a>
+    </div>
+
+    <div class="section-title">Recent Predictions</div>
+    <ul class="history-box" id="historyList"></ul>
+
+    <div class="winner-box-container">
+      <div class="winner-box-header">🏆 Live Winner Feed</div>
+      <div class="winner-feed">
+        <span id="winUser">User_841x won</span>
+        <span class="winner-tag" id="winAmt">+₹420</span>
+      </div>
+    </div>
+
   </div>
+
+  <script>
+    // --- 1. INTERNET OFFLINE DETECTION LOGIC ---
+    function checkInternetStatus() {
+      const modal = document.getElementById('offlineModal');
+      if (!navigator.onLine) {
+        modal.style.display = 'flex';
+      } else {
+        modal.style.display = 'none';
+      }
+    }
+
+    window.addEventListener('offline', checkInternetStatus);
+    window.addEventListener('online', checkInternetStatus);
+    // Initial check on load
+    checkInternetStatus();
+
+    // --- 2. PARTICLES ANIMATION ---
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const particles = Array.from({ length: 40 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 2 + 1,
+      speedX: (Math.random() - 0.5) * 0.6,
+      speedY: (Math.random() - 0.5) * 0.6,
+      alpha: Math.random() * 0.5 + 0.2
+    }));
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+        ctx.fillStyle = `rgba(192, 132, 252, ${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    // --- 3. SOUND SYNTHESIZER ---
+    function playBeep(freq = 600, duration = 0.08) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    let lastPredictedPeriod = "";
+
+    // --- 4. GENERATE LOGIC ---
+    function handleGenerate() {
+      if (!navigator.onLine) {
+        checkInternetStatus();
+        return;
+      }
+
+      const input = document.getElementById('periodInput').value.trim();
+      const err = document.getElementById('errorText');
+
+      if (input.length < 3) {
+        err.innerText = "⚠️ Minimum 3 digits required!";
+        err.style.display = 'block';
+        playBeep(200, 0.2);
+        return;
+      }
+
+      if (input === lastPredictedPeriod) {
+        err.innerText = "⚠️ Pliz enter Next Period Number";
+        err.style.display = 'block';
+        playBeep(200, 0.2);
+        return;
+      }
+
+      err.style.display = 'none';
+      playBeep(800, 0.05);
+
+      lastPredictedPeriod = input;
+
+      const bar = document.getElementById('analysisBar');
+      const fill = document.getElementById('analysisFill');
+      bar.style.display = 'block';
+      fill.style.width = '0%';
+
+      setTimeout(() => { fill.style.width = '100%'; }, 20);
+
+      setTimeout(() => {
+        bar.style.display = 'none';
+        
+        const num = Math.floor(Math.random() * 9) + 1;
+        const size = ["Big", "Small"][Math.floor(Math.random() * 2)];
+
+        document.getElementById('resNum').innerText = num;
+        document.getElementById('resSize').innerText = size;
+
+        playBeep(1200, 0.15);
+
+        addHistory(input, num, size);
+      }, 500);
+    }
+
+    function hideError() {
+      document.getElementById('errorText').style.display = 'none';
+    }
+
+    function addHistory(period, num, size) {
+      const list = document.getElementById('historyList');
+      const li = document.createElement('li');
+      li.innerHTML = `<span>Period: ...${period.slice(-3)}</span> <span style="color:#00ff88; font-weight:bold;">${num} (${size})</span>`;
+      list.prepend(li);
+      if (list.children.length > 5) list.removeChild(list.lastChild);
+    }
+
+    // --- 5. LIVE WINNERS TICKER ---
+    setInterval(() => {
+      const u = Math.floor(100 + Math.random() * 900);
+      const amt = Math.floor(Math.random() * 401) + 100;
+      document.getElementById('winUser').innerText = `User_${u}x won`;
+      document.getElementById('winAmt').innerText = `+₹${amt}`;
+    }, 2800);
+  </script>
 
 </body>
 </html>
-
-
-* MADE BY @A7655520548 OUR TELEGRAM CHANNEL
