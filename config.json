@@ -1,0 +1,22 @@
+{
+    "enabled": true,
+    "get_key_url": "https://black-fox-getkey.edgeone.dev/",
+    "telegram_url": "https://t.me/akash_black_fox",
+    "banned_devices": [],
+    "keys": {
+        "FOX-VIP1-ARIF": {
+            "device_id": "",
+            "username": "FOX-VIP",
+            "type": "buy",
+            "created_at": 1745000000000,
+            "expires_at": 9999999999999
+        },
+        "FOX-PQ39-PSMT": {
+            "device_id": "89bb2774d573f36b",
+            "username": "Free User",
+            "type": "free",
+            "created_at": 1789718392916,
+            "expires_at": 1789804792916
+        }
+    }
+}
